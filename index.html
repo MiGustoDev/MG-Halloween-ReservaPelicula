@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Burger Black | Edición Especial Halloween - Mi Gusto</title>
+  <meta name="description" content="Descubrí la nueva Big Burger Black de Mi Gusto: la reina de las empanadas se viste de noche con masa negra al carbón activado para Halloween. ¡Participá por un sorteo exclusivo!">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Outfit:wght@300;400;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Audio Player (Optional Halloween vibe toggle) -->
+  <div class="audio-control" id="audioToggle" title="Activar sonido tenebroso">
+    <i data-lucide="volume-2" id="audioIcon"></i>
+    <span class="audio-tooltip">Vibra Spooky ON/OFF</span>
+  </div>
+
+  <!-- Background Animated Fog & Particles -->
+  <div class="spooky-fog-layer"></div>
+  <div class="bats-container" id="batsContainer"></div>
+
+  <!-- Glow Blobs -->
+  <div class="glow-orb orb-orange"></div>
+  <div class="glow-orb orb-green"></div>
+  <div class="glow-orb orb-purple"></div>
+
+  <!-- Navigation -->
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo-wrapper">
+        <img src="assets/logo-migusto.png" alt="Mi Gusto Empanadas" class="brand-logo">
+        <span class="halloween-badge">🎃 HALLOWEEN EDITION</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#experiencia">El Misterio</a>
+        <a href="#ingredientes">Ingredientes</a>
+        <a href="#sorteo" class="btn-nav-glow">Sorteo Maldito</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="inicio">
+      <div class="hero-content">
+        <div class="hero-text-block">
+          <div class="dark-edition-tag">
+            <span class="pulse-dot"></span>
+            SOLO POR TIEMPO LIMITADO · OCTUBRE 2026
+          </div>
+          <h1 class="hero-title">
+            BIG BURGER <span class="highlight-black">BLACK</span>
+          </h1>
+          <p class="hero-subtitle">
+            Nuestra empanada estrella desciende a las sombras. Masa negra tenebrosa infusionada con carbón activado, sésamo tostado y el relleno irresistible que ya conocés llevado al lado oscuro.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#sorteo" class="btn-primary-spooky">
+              <span>PARTICIPAR POR 1 AÑO GRATIS</span>
+              <i data-lucide="flame"></i>
+            </a>
+            <a href="#experiencia" class="btn-secondary-dark">
+              <span>EXPLORAR SABORES</span>
+              <i data-lucide="chevron-down"></i>
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Carne vacuna premium</span>
+            </div>
+            <div class="stat-separator"></div>
+            <div class="stat-item">
+              <span class="stat-number">BLACK</span>
+              <span class="stat-label">Masa artesanal oscura</span>
+            </div>
+            <div class="stat-separator"></div>
+            <div class="stat-item">
+              <span class="stat-number">EXTRA</span>
+              <span class="stat-label">Cheddar & Bacon ahumado</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="burger-portal">
+            <div class="aura-spin"></div>
+            <div class="flame-ring"></div>
+            <div class="burger-card-3d" id="burgerCard">
+              <img src="assets/big-burger-black.jpg" alt="Big Burger Black Halloween Mi Gusto" class="burger-hero-img">
+              <div class="floating-badge badge-top-right">
+                <i data-lucide="skull"></i>
+                <span>Edición Halloween</span>
+              </div>
+              <div class="floating-badge badge-bottom-left">
+                <i data-lucide="sparkles"></i>
+                <span>Masa Negra Especial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY / SECRET SECTION -->
+    <section class="story-section" id="experiencia">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-eyebrow">EL RITUAL DE LA OSCURIDAD</span>
+          <h2 class="section-title">¿QUÉ LA HACE TAN IRRESISTIBLE Y PERTURBADORA?</h2>
+          <p class="section-desc">
+            Cada bocado encierra un balance demoníacamente delicioso. El crujido de la masa oscura horneada a la perfección, contrastando con el interior fundido y rebosante de sabor burger.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="card-icon-wrap icon-green">
+              <i data-lucide="sparkle"></i>
+            </div>
+            <h3>Masa Negra Black Crust</h3>
+            <p>Elaborada con una fórmula especial de masa suave y hojaldrada color obsidiana, coronada con lluvia de sésamo blanco y negro crocante.</p>
+          </div>
+
+          <div class="feature-card featured-glow">
+            <div class="card-icon-wrap icon-orange">
+              <i data-lucide="flame"></i>
+            </div>
+            <h3>Carne Asada & Panceta Crujiente</h3>
+            <p>Carne seleccionada en trozos jugosos, cebollas caramelizadas lentamente y panceta crocante con un toque ahumado que hechiza tus sentidos.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="card-icon-wrap icon-purple">
+              <i data-lucide="droplet"></i>
+            </div>
+            <h3>Río de Cheddar Fundido</h3>
+            <p>Queso cheddar cremoso fundente al calor del horno junto con la salsa Big Burger secreta que sella el pacto de sabor inigualable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INGREDIENTS SHOWCASE -->
+    <section class="ingredients-section" id="ingredientes">
+      <div class="section-container">
+        <div class="split-wrapper">
+          <div class="split-image-box">
+            <div class="smoke-fx"></div>
+            <img src="assets/big-burger-black.jpg" alt="Detalle del relleno Big Burger Black" class="split-img">
+            <div class="inspect-pin pin-1" style="top: 25%; left: 35%;">
+              <span class="pin-dot"></span>
+              <div class="pin-card">Pepinillos & Salsa Secreta</div>
+            </div>
+            <div class="inspect-pin pin-2" style="top: 50%; left: 50%;">
+              <span class="pin-dot"></span>
+              <div class="pin-card">Cheddar Lava Oozing</div>
+            </div>
+            <div class="inspect-pin pin-3" style="top: 75%; left: 65%;">
+              <span class="pin-dot"></span>
+              <div class="pin-card">Carne Angus Sazonada</div>
+            </div>
+          </div>
+
+          <div class="split-info">
+            <span class="section-eyebrow">ANATOMÍA DEL MONSTRUO</span>
+            <h2 class="section-title">EL CORAZÓN DE LA BIG BURGER BLACK</h2>
+            <ul class="ingredient-list">
+              <li>
+                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
+                <div>
+                  <strong>Masa Tenebrosa 100% Comestible:</strong> Tintes naturales al carbón vegetal que otorgan el color noche sin alterar el sabor genuino de nuestra masa casera.
+                </div>
+              </li>
+              <li>
+                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
+                <div>
+                  <strong>Medallón de Carne Vacuna:</strong> Cocido a fuego controlado con notas ahumadas de parrilla.
+                </div>
+              </li>
+              <li>
+                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
+                <div>
+                  <strong>Doble Queso Cheddar Americano:</strong> Fundido a punto lava, garantizando la textura más adictiva en cada mordida.
+                </div>
+              </li>
+              <li>
+                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
+                <div>
+                  <strong>Smoked Bacon & Onions:</strong> Tropezones de panceta dorada y cebolla reducida al estilo hamburguesería neoyorquina.
+                </div>
+              </li>
+            </ul>
+
+            <div class="limited-box">
+              <i data-lucide="clock"></i>
+              <div>
+                <strong>¡Edición Ultralimitada!</strong>
+                <p>Disponible en todas las sucursales Mi Gusto y por delivery durante la temporada de Halloween o hasta agotar stock.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SORTEO / GIVEAWAY SECTION -->
+    <section class="giveaway-section" id="sorteo">
+      <div class="section-container">
+        <div class="giveaway-card">
+          <div class="giveaway-glow"></div>
+          
+          <div class="giveaway-header">
+            <div class="giveaway-tag">
+              <i data-lucide="ghost"></i>
+              SORTEO HALLOWEEN MI GUSTO
+            </div>
+            <h2 class="giveaway-title">
+              ¿TE ANIMÁS AL PACTO DE LA <span class="text-gradient-orange">BIG BURGER BLACK</span>?
+            </h2>
+            <p class="giveaway-subtitle">
+              Dejá tu mail para ingresar al aquelarre de premios. Sorteamos <strong>10 DOCENAS TERRORÍFICAS</strong> y un <strong>AÑO DE EMPANADAS GRATIS</strong> de Mi Gusto para el afortunado de la noche de brujas.
+            </p>
+          </div>
+
+          <!-- Giveaway Form -->
+          <form class="giveaway-form" id="giveawayForm">
+            <div class="input-row">
+              <div class="input-group">
+                <label for="userName">Tu Nombre o Alias Monstruoso</label>
+                <div class="input-wrapper">
+                  <i data-lucide="user" class="input-icon"></i>
+                  <input type="text" id="userName" name="name" placeholder="Ej: Drácula de Palermo" required>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="userEmail">Tu Correo Electrónico</label>
+                <div class="input-wrapper">
+                  <i data-lucide="mail" class="input-icon"></i>
+                  <input type="email" id="userEmail" name="email" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="input-group">
+                <label for="userSucursal">Tu Sucursal Más Cercana</label>
+                <div class="input-wrapper">
+                  <i data-lucide="map-pin" class="input-icon"></i>
+                  <select id="userSucursal" name="sucursal" required>
+                    <option value="" disabled selected>Elegí tu sucursal Mi Gusto</option>
+                    <option value="palermo">Palermo Soho / Hollywood</option>
+                    <option value="belgrano">Belgrano</option>
+                    <option value="recoleta">Recoleta</option>
+                    <option value="caballito">Caballito</option>
+                    <option value="san_isidro">San Isidro / Zona Norte</option>
+                    <option value="ramos_mejia">Ramos Mejía / Zona Oeste</option>
+                    <option value="otra">Otra sucursal / Delivery</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="termsCheck" required checked>
+                <span class="checkmark"></span>
+                <span class="label-text">Acepto las bases y condiciones del Sorteo Maldito y declaro no temerle al placer supremo.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-submit-giveaway" id="submitBtn">
+              <span class="btn-text">¡QUIERO PARTICIPAR DEL SORTEO!</span>
+              <i data-lucide="skull"></i>
+            </button>
+          </form>
+
+          <!-- Success Modal / State -->
+          <div class="success-box" id="successState" style="display: none;">
+            <div class="success-icon-wrap">
+              <i data-lucide="check-check"></i>
+            </div>
+            <h3 class="success-title">¡YA ESTÁS EN LA LISTA NEGRA! 🎃</h3>
+            <p class="success-desc">
+              Hemos registrado tu alma (y tu mail: <strong id="registeredEmail"></strong>). Te enviamos un cupón sorpresa del <strong>15% OFF</strong> en tu próximo pedido para que pruebes la <strong>Big Burger Black</strong> antes que nadie.
+            </p>
+            <div class="coupon-box">
+              <span class="coupon-label">CÓDIGO EXCLUSIVO:</span>
+              <span class="coupon-code">BIGBLACK15</span>
+              <button type="button" class="btn-copy-code" id="copyCodeBtn" title="Copiar cupón">
+                <i data-lucide="copy"></i> Copiar
+              </button>
+            </div>
+            <p class="sorteo-date">El sorteo se transmitirá el 31 de Octubre a las 21:00 hs en el Instagram oficial de @migustoempanadas.</p>
+          </div>
+
+          <!-- Micro counter & trust -->
+          <div class="giveaway-footer-info">
+            <div class="live-counter">
+              <span class="live-blink"></span>
+              <span id="counterNumber">1.842</span> devoradores ya se registraron
+            </div>
+            <div class="safe-badge">
+              <i data-lucide="shield-check"></i> 100% Sin spam · Solo beneficios de miedo
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="assets/logo-migusto.png" alt="Mi Gusto" class="footer-logo">
+        <p>Mi Gusto © 2026 · El verdadero sabor de las empanadas premium en Argentina. Especial Halloween Big Burger Black.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="link-column">
+          <h4>Navegación</h4>
+          <a href="#inicio">Inicio</a>
+          <a href="#experiencia">El Misterio</a>
+          <a href="#ingredientes">Ingredientes</a>
+          <a href="#sorteo">Sorteo</a>
+        </div>
+        <div class="link-column">
+          <h4>Redes Malditas</h4>
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram @migusto</a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
+          <a href="#">Pedir Online</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Campaña de Halloween Oficial de Mi Gusto. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
