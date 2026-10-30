@@ -44,7 +44,6 @@
       <div class="lurker-glow"></div>
       <div class="machete-slash-gleam"></div>
       <img src="assets/jason-full.png" alt="Jason Voorhees acechando" class="lurker-jason-img">
-      <div class="lurker-whisper-tag">KI-KI-KI... MA-MA-MA...</div>
     </div>
 
     <!-- Left Lurker: Jason Iconic Hockey Mask -->
@@ -117,7 +116,7 @@
           <div class="giveaway-header">
             <div class="giveaway-tag">
               <i data-lucide="ticket"></i>
-              RESERVA DE MESA · LOCAL VICENTE LÓPEZ
+              <span>RESERVA DE MESA · LOCAL VICENTE LÓPEZ</span>
             </div>
             <h2 class="giveaway-title">
               NOCHE DE CINE: <span class="text-gradient-blood">VIERNES 13</span>
@@ -127,63 +126,46 @@
             </p>
           </div>
 
-          <!-- Reservation Form -->
+          <!-- Reservation Form (Campos apilados verticalmente con asteriscos obligatorios) -->
           <form class="giveaway-form" id="reservaForm">
-            <div class="input-row">
-              <div class="input-group">
-                <label for="userName">Nombre y Apellido</label>
-                <div class="input-wrapper">
-                  <i data-lucide="user" class="input-icon"></i>
-                  <input type="text" id="userName" name="name" placeholder="Ej: Martín Gómez" required>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="userEmail">Correo Electrónico</label>
-                <div class="input-wrapper">
-                  <i data-lucide="mail" class="input-icon"></i>
-                  <input type="email" id="userEmail" name="email" placeholder="tucorreo@ejemplo.com" required>
-                </div>
+            <div class="input-group">
+              <label for="userName">Nombre y apellido <span class="required-asterisk">*</span></label>
+              <div class="input-wrapper">
+                <i data-lucide="user" class="input-icon"></i>
+                <input type="text" id="userName" name="name" placeholder="Ingresar nombre y apellido" required>
               </div>
             </div>
 
-            <div class="input-row">
-              <div class="input-group">
-                <label for="userPhone">Teléfono / WhatsApp de Contacto</label>
-                <div class="input-wrapper">
-                  <i data-lucide="phone" class="input-icon"></i>
-                  <input type="tel" id="userPhone" name="phone" placeholder="Ej: 11 3456-7890" required>
-                </div>
+            <div class="input-group">
+              <label for="userPhone">Número de celular <span class="required-asterisk">*</span></label>
+              <div class="input-wrapper">
+                <i data-lucide="phone" class="input-icon"></i>
+                <input type="tel" id="userPhone" name="phone" placeholder="Ingresar su número" required>
               </div>
+            </div>
 
-              <div class="input-group">
-                <label for="userGuests">Cantidad de Personas (Mesa)</label>
-                <div class="input-wrapper">
-                  <i data-lucide="users" class="input-icon"></i>
-                  <select id="userGuests" name="guests" required>
-                    <option value="" disabled selected>Seleccioná comensales</option>
-                    <option value="1">1 Persona (Individual)</option>
-                    <option value="2">2 Personas (Pareja / Amigos)</option>
-                    <option value="3">3 Personas</option>
-                    <option value="4">4 Personas (Mesa grupal)</option>
-                    <option value="5+">5 o más personas (Mesa especial)</option>
-                  </select>
-                </div>
+            <div class="input-group">
+              <label for="userGuests">Cantidad de personas <span class="required-asterisk">*</span></label>
+              <div class="input-wrapper">
+                <i data-lucide="users" class="input-icon"></i>
+                <input type="number" id="userGuests" name="guests" min="1" max="10" placeholder="Ingresar cantidad" required>
               </div>
             </div>
 
             <div class="checkbox-group">
               <label class="custom-checkbox">
-                <input type="checkbox" id="termsCheck" required checked>
+                <input type="checkbox" id="termsCheck" required>
                 <span class="checkmark"></span>
                 <span class="label-text">Confirmo asistencia para la función del día sábado en Mi Gusto Vicente López y acepto las condiciones de reserva.</span>
               </label>
             </div>
 
-            <button type="submit" class="btn-submit-giveaway" id="submitBtn">
-              <span class="btn-text">CONFIRMAR MI RESERVA</span>
-              <i data-lucide="ticket"></i>
-            </button>
+            <div class="form-btn-wrapper">
+              <button type="submit" class="btn-submit-giveaway" id="submitBtn">
+                <span class="btn-text">CONFIRMAR MI RESERVA</span>
+                <i data-lucide="ticket"></i>
+              </button>
+            </div>
           </form>
 
           <!-- Success State -->
@@ -193,7 +175,7 @@
             </div>
             <h3 class="success-title">¡RESERVA CONFIRMADA! 🎟️</h3>
             <p class="success-desc">
-              Tu lugar para la noche de <strong>Viernes 13 en Mi Gusto Vicente López</strong> está reservado para <strong id="registeredName"></strong>. Te enviamos la confirmación a <strong id="registeredEmail"></strong>.
+              Tu lugar para la noche de <strong>Viernes 13 en Mi Gusto Vicente López</strong> está reservado para <strong id="registeredName"></strong> (<strong id="registeredGuests"></strong>). Te contactaremos por WhatsApp a <strong id="registeredPhone"></strong> con los detalles de tu mesa.
             </p>
             <div class="coupon-box">
               <span class="coupon-label">CÓDIGO DE ENTRADA:</span>
@@ -205,14 +187,15 @@
             <p class="sorteo-date">📍 Presentate en Mi Gusto Vicente López este sábado a partir de las 20:30 hs con tu código de reserva.</p>
           </div>
 
-          <!-- Micro counter & trust -->
+          <!-- Micro counter inteligente & trust badge -->
           <div class="giveaway-footer-info">
-            <div class="live-counter">
-              <span class="live-blink"></span>
-              <span id="counterNumber">38</span> lugares ya reservados (¡Últimos 12 cupos!)
+            <div class="live-counter" id="capacityCounter">
+              <span class="live-blink" id="liveBlinkDot"></span>
+              <span id="capacityText"><strong id="reservedNumber">0</strong> lugares reservados (<span class="remaining-highlight" id="remainingHighlight">¡Últimos 34 lugares!</span>)</span>
             </div>
             <div class="safe-badge">
-              <i data-lucide="shield-check"></i> Reserva directa con confirmación inmediata
+              <i data-lucide="shield-check" class="safe-icon-green"></i>
+              <span>Reserva directa con confirmación inmediata</span>
             </div>
           </div>
         </div>

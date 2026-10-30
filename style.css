@@ -260,31 +260,6 @@ body.friday-theme {
   100% { opacity: 0; transform: rotate(-35deg) scaleX(1.8); }
 }
 
-/* Menacing Whisper Tag */
-.lurker-whisper-tag {
-  position: absolute;
-  bottom: 12%;
-  left: -20px;
-  font-family: var(--font-slasher);
-  font-size: 0.75rem;
-  letter-spacing: 3px;
-  color: var(--blood-red);
-  background: rgba(4, 7, 10, 0.92);
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(229, 9, 20, 0.4);
-  box-shadow: 0 0 15px rgba(229, 9, 20, 0.3);
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: var(--transition-smooth);
-}
-
-.lurker-right.is-visible .lurker-whisper-tag {
-  opacity: 0.95;
-  transform: translateY(0);
-}
-
 /* Left Lurker: Jason Hockey Mask */
 .lurker-left {
   position: absolute;
@@ -355,18 +330,16 @@ body.friday-theme {
 .delay-2 { transition-delay: 0.24s; }
 .delay-3 { transition-delay: 0.36s; }
 
-/* ==========================================================================
-   Header & Navigation (Oculto en hero fullscreen, revelado al scrollear)
-   ========================================================================== */
+/* Navigation Header (Oculto en hero fullscreen, revelado con leve blur al scrollear) */
 .header-reveal-on-scroll {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 90;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background: rgba(4, 7, 10, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(4, 7, 10, 0.72);
   border-bottom: 1px solid rgba(229, 9, 20, 0.25);
   opacity: 0;
   transform: translateY(-100%);
@@ -926,18 +899,23 @@ body.friday-theme {
    ========================================================================== */
 .giveaway-section {
   position: relative;
-  padding: 90px 24px 120px;
+  padding: 20px 24px 30px;
+  min-height: calc(100vh - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 10;
 }
 
 .giveaway-card {
   position: relative;
-  max-width: 840px;
+  width: 100%;
+  max-width: 700px;
   margin: 0 auto;
   background: var(--bg-card);
   border: 1px solid rgba(229, 9, 20, 0.45);
   border-radius: var(--radius-lg);
-  padding: 60px 48px;
+  padding: 38px 46px 28px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(229, 9, 20, 0.25);
   backdrop-filter: blur(16px);
   overflow: hidden;
@@ -945,13 +923,13 @@ body.friday-theme {
 
 .giveaway-blood-glow {
   position: absolute;
-  top: -120px;
+  top: -100px;
   left: 50%;
   transform: translateX(-50%);
-  width: 400px;
-  height: 250px;
+  width: 380px;
+  height: 220px;
   background: radial-gradient(ellipse at center, var(--blood-glow) 0%, transparent 70%);
-  filter: blur(50px);
+  filter: blur(45px);
   pointer-events: none;
 }
 
@@ -959,8 +937,8 @@ body.friday-theme {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 40px;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 .giveaway-tag {
@@ -968,22 +946,22 @@ body.friday-theme {
   align-items: center;
   gap: 8px;
   font-family: var(--font-slasher);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   letter-spacing: 2px;
+  font-weight: 700;
   color: var(--blood-red);
-  background: rgba(229, 9, 20, 0.12);
-  border: 1px solid rgba(229, 9, 20, 0.35);
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  padding: 0;
   margin: 0 auto;
   width: fit-content;
 }
 
 .giveaway-title {
   font-family: var(--font-slasher);
-  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-size: clamp(1.6rem, 2.5vw, 2.15rem);
   font-weight: 900;
-  line-height: 1.2;
+  line-height: 1.18;
 }
 
 .text-gradient-blood {
@@ -992,35 +970,37 @@ body.friday-theme {
 }
 
 .giveaway-subtitle {
-  font-size: 1.05rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
-  max-width: 620px;
+  max-width: 560px;
   margin: 0 auto;
-  line-height: 1.65;
+  line-height: 1.5;
 }
 
 .giveaway-form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 15px;
 }
 
 .input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .input-group label {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--text-main);
+  display: flex;
+  align-items: center;
 }
 
 .input-wrapper {
@@ -1044,10 +1024,10 @@ body.friday-theme {
   background: rgba(4, 7, 10, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
-  padding: 14px 16px 14px 46px;
+  padding: 12px 18px 12px 46px;
   color: #fff;
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.94rem;
   outline: none;
   transition: var(--transition-fast);
 }
@@ -1055,6 +1035,19 @@ body.friday-theme {
 .input-wrapper select {
   appearance: none;
   cursor: pointer;
+}
+
+/* Hide spin arrows completely from number input */
+.input-wrapper input[type="number"]::-webkit-inner-spin-button,
+.input-wrapper input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+.input-wrapper input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
 }
 
 .input-wrapper input:focus,
@@ -1065,50 +1058,64 @@ body.friday-theme {
 }
 
 .checkbox-group {
-  margin: 6px 0;
+  margin: 3px 0 6px;
 }
 
 .custom-checkbox {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 11px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .custom-checkbox input {
   accent-color: var(--blood-red);
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
+  width: 17px;
+  height: 17px;
+  margin-top: 1px;
   cursor: pointer;
+}
+
+.required-asterisk {
+  color: var(--blood-red);
+  font-weight: 900;
+  margin-left: 3px;
+  font-size: 0.95rem;
+}
+
+.form-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 4px;
 }
 
 .btn-submit-giveaway {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   background: linear-gradient(135deg, var(--blood-red) 0%, var(--blood-red-deep) 100%);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   font-family: var(--font-body);
-  font-size: 1.05rem;
+  font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: 0.8px;
-  padding: 18px 36px;
+  padding: 12px 32px;
   border-radius: var(--radius-full);
   cursor: pointer;
   box-shadow: 0 0 25px var(--blood-glow);
   transition: var(--transition-smooth);
-  margin-top: 8px;
+  width: auto;
 }
 
 .btn-submit-giveaway:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 0 40px var(--blood-red);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 35px var(--blood-red);
 }
 
 /* Success Box */
@@ -1192,17 +1199,28 @@ body.friday-theme {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 36px;
-  padding-top: 22px;
+  flex-wrap: nowrap;
+  gap: 16px;
+  width: 100%;
+  margin-top: 24px;
+  padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
 }
 
 .live-counter {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.remaining-highlight {
+  color: var(--blood-red);
+  font-weight: 700;
 }
 
 .live-blink {
@@ -1212,6 +1230,29 @@ body.friday-theme {
   background: var(--blood-red);
   box-shadow: 0 0 10px var(--blood-red);
   animation: pulseBlood 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.safe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.safe-icon-green {
+  color: #00e5a3;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 163, 0.45));
+}
+
+.safe-badge span {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -1350,7 +1391,13 @@ body.friday-theme {
   }
 
   .giveaway-card {
-    padding: 36px 20px;
+    padding: 30px 20px 24px;
+  }
+
+  .giveaway-footer-info {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
   }
 
   /* On mobile, keep lurkers peeking in subtly from edges without blocking touch */

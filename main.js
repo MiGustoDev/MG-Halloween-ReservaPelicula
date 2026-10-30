@@ -30,9 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. Non-constant Periodic Thunder (Web Audio API, no rain)
   setupPeriodicThunderAudio();
-
-  // 9. Survivor / Capacity Counter Ticker
-  setupLiveCounter();
 });
 
 /**
@@ -187,14 +184,50 @@ function spawnBloodDrops() {
 }
 
 /**
+ * Intelligent Capacity Manager (Max 34 places)
+ * Recauda reservas reales registradas en localStorage
+ */
+const TOTAL_CAPACITY = 34;
+const BASE_RESERVED = 0;
+
+function getReservedSeats() {
+  const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas') || '[]');
+  const extraSeats = reservations.reduce((acc, r) => acc + (parseInt(r.guests, 10) || 1), 0);
+  return Math.min(TOTAL_CAPACITY, BASE_RESERVED + extraSeats);
+}
+
+function updateCapacityDisplay() {
+  const reserved = getReservedSeats();
+  const remaining = Math.max(0, TOTAL_CAPACITY - reserved);
+
+  const reservedEl = document.getElementById('reservedNumber');
+  const remainingEl = document.getElementById('remainingHighlight');
+
+  if (reservedEl) reservedEl.textContent = reserved;
+  if (remainingEl) {
+    if (remaining > 0) {
+      remainingEl.textContent = `¡Últimos ${remaining} lugares!`;
+      remainingEl.style.color = '';
+    } else {
+      remainingEl.textContent = `¡Lugares agotados!`;
+      remainingEl.style.color = '#ff1744';
+    }
+  }
+}
+
+/**
  * Official Reservation Form Handler
  */
 function setupReservationForm() {
   const form = document.getElementById('reservaForm');
   const successBox = document.getElementById('successState');
   const nameDisplay = document.getElementById('registeredName');
-  const emailDisplay = document.getElementById('registeredEmail');
+  const phoneDisplay = document.getElementById('registeredPhone');
+  const guestsDisplay = document.getElementById('registeredGuests');
   const copyBtn = document.getElementById('copyCodeBtn');
+
+  // Initialize capacity counter on load
+  updateCapacityDisplay();
 
   if (!form) return;
 
@@ -202,23 +235,24 @@ function setupReservationForm() {
     e.preventDefault();
 
     const name = document.getElementById('userName').value.trim();
-    const email = document.getElementById('userEmail').value.trim();
     const phone = document.getElementById('userPhone').value.trim();
     const guests = document.getElementById('userGuests').value;
 
-    if (!name || !email) return;
+    if (!name || !phone || !guests) return;
 
     // Save to local storage for persistence
     const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas') || '[]');
     reservations.push({
       name,
-      email,
       phone,
       guests,
       sucursal: 'Vicente López',
       date: new Date().toISOString()
     });
     localStorage.setItem('migusto_vl_reservas', JSON.stringify(reservations));
+
+    // Update real-time capacity counter
+    updateCapacityDisplay();
 
     // Fire Slasher Confetti
     fireSlasherConfetti();
@@ -228,7 +262,8 @@ function setupReservationForm() {
     if (successBox) {
       successBox.style.display = 'flex';
       if (nameDisplay) nameDisplay.textContent = name;
-      if (emailDisplay) emailDisplay.textContent = email;
+      if (phoneDisplay) phoneDisplay.textContent = phone;
+      if (guestsDisplay) guestsDisplay.textContent = `${guests} ${guests === '1' ? 'persona' : 'personas'}`;
       successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
@@ -412,20 +447,4 @@ function setupPeriodicThunderAudio() {
     noiseSource.start(now);
     noiseSource.stop(now + duration);
   }
-}
-
-/**
- * Capacity Ticker
- */
-function setupLiveCounter() {
-  const el = document.getElementById('counterNumber');
-  if (!el) return;
-
-  let current = 38;
-  setInterval(() => {
-    if (Math.random() > 0.7 && current < 47) {
-      current += 1;
-      el.textContent = current;
-    }
-  }, 6000);
 }
