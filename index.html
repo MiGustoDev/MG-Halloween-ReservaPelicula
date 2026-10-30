@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Viernes 13 | Camp Crystal Lake - Mi Gusto</title>
-  <meta name="description" content="Sobreviví a la noche más oscura en Camp Crystal Lake. Descubrí la nueva Big Burger Black de Mi Gusto: masa negra al carbón activado, carne premium y cheddar volcánico.">
+  <title>Viernes 13 en Mi Gusto | Noche de Película en Vicente López</title>
+  <meta name="description" content="Viví la noche de cine y terror en Mi Gusto Vicente López. Proyección exclusiva de Viernes 13 este sábado. ¡Reservá tu lugar ahora, cupos muy limitados!">
   
   <!-- Favicon (Máscara de Jason Voorhees) -->
   <link rel="icon" type="image/png" href="assets/jason-mask.png">
@@ -37,7 +37,7 @@
   <div class="glow-orb orb-lake-teal"></div>
   <div class="glow-orb orb-moon-blue"></div>
 
-  <!-- LATERAL LURKERS (Assets creeping in from screen edges on scroll) -->
+  <!-- LATERAL LURKERS (Jason & Mask lurking from screen edges) -->
   <div class="lateral-lurkers-wrapper" id="lurkersWrapper" aria-hidden="true">
     <!-- Right Lurker: Jason Voorhees with Machete -->
     <div class="lurker-actor lurker-right" id="lurkerJason">
@@ -55,172 +55,163 @@
     </div>
   </div>
 
-  <!-- Navigation Header (Sin enlaces, solo logo y texto con punto rojo sin cápsula) -->
-  <header class="header">
+  <!-- Navigation Header (Oculto en el hero inicial, visible al hacer scroll) -->
+  <header class="header header-reveal-on-scroll" id="siteHeader">
     <div class="nav-container">
       <div class="logo-wrapper">
-        <img src="assets/logo-migusto.png" alt="Mi Gusto Empanadas" class="brand-logo">
+        <a href="#inicio">
+          <img src="assets/logo-migusto.png" alt="Mi Gusto Empanadas" class="brand-logo">
+        </a>
         <span class="slasher-badge">
           <span class="blood-dot"></span>
-          CAMP CRYSTAL LAKE · VIERNES 13
+          NOCHE DE PELÍCULA · VICENTE LÓPEZ
         </span>
+      </div>
+      <div class="nav-right-cta">
+        <a href="#reservar" class="btn-nav-reserve">
+          <i data-lucide="ticket"></i>
+          <span>RESERVAR MESA</span>
+        </a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- HERO SECTION (CENTRAL CINEMA VIDEO SHOWCASE) -->
-    <section class="hero-section hero-cinema-section" id="inicio">
-      <div class="hero-cinema-content">
-        <div class="hero-cinema-header" data-reveal="slide-up">
-          <h1 class="hero-title hero-title-cinema">
-            BIG BURGER <span class="highlight-slasher">BLACK</span>
-          </h1>
-          <p class="hero-subtitle hero-subtitle-cinema">
-            El tráiler oficial de la noche más oscura. Preparate para revivir el terror en Camp Crystal Lake junto a Mi Gusto.
-          </p>
+    <!-- HERO SECTION (FULLSCREEN VIDEO BACKGROUND + CENTER LOGO & RESERVAR BUTTON) -->
+    <section class="hero-fullscreen" id="inicio">
+      <!-- Background Fullscreen Video (Sin controles, sin barra, sin botones de reproducción, autoplay, loop) -->
+      <video 
+        class="hero-bg-video" 
+        id="heroBgVideo" 
+        autoplay 
+        muted 
+        loop 
+        playsinline 
+        poster="assets/crystal-lake-bg.jpg"
+      >
+        <source src="assets/video.mp4" type="video/mp4">
+      </video>
+
+      <!-- Vignette & Mist Layer for Readability -->
+      <div class="hero-video-vignette"></div>
+
+      <!-- Center Box: Logo Mi Gusto + Subtitle + Reservar Button -->
+      <div class="hero-center-box" data-reveal="zoom-in">
+        <div class="hero-event-tag">
+          <span class="tag-blood-dot"></span>
+          <span>ESTE SÁBADO · VICENTE LÓPEZ</span>
         </div>
 
-        <!-- Video Player Container -->
-        <div class="hero-video-container" data-reveal="zoom-in">
-          <div class="video-ambient-glow"></div>
-          <div class="video-wrapper">
-            <video 
-              id="heroVideo" 
-              class="hero-video-player" 
-              controls 
-              playsinline 
-              poster="assets/crystal-lake-bg.jpg" 
-              preload="metadata"
-            >
-              <source src="assets/video.mp4" type="video/mp4">
-              Tu navegador no soporta el formato de video.
-            </video>
+        <img src="assets/logo-migusto.png" alt="Mi Gusto" class="hero-brand-logo">
 
-            <!-- Video Poster / Play Button Overlay -->
-            <div class="video-poster-overlay" id="videoPlayOverlay">
-              <div class="play-btn-pulse">
-                <i data-lucide="play" class="play-icon"></i>
-              </div>
-              <div class="video-overlay-text">
-                <span class="video-tag">TRÁILER OFICIAL · VIERNES 13</span>
-                <span class="video-hint">Clic para reproducir video</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h1 class="hero-movie-title">
+          NOCHE DE CINE: <span class="highlight-slasher">VIERNES 13</span>
+        </h1>
 
-        <div class="hero-cta-group cinema-cta" data-reveal="slide-up">
-          <a href="#sorteo" class="btn-primary-slasher">
-            <span>PARTICIPAR DEL SORTEO</span>
-            <i data-lucide="skull"></i>
-          </a>
-          <a href="#experiencia" class="btn-secondary-dark">
-            <span>EXPLORAR LA LEYENDA</span>
-            <i data-lucide="chevron-down"></i>
-          </a>
-        </div>
+        <p class="hero-movie-desc">
+          Vení a vivir la experiencia cinematográfica de terror en nuestro local de Vicente López. Pantalla gigante, el clásico de Jason Voorhees y las mejores empanadas de Argentina.
+        </p>
+
+        <!-- Botón Reservar: Scrollea automáticamente hacia abajo al formulario -->
+        <a href="#reservar" class="btn-hero-reserve" id="btnHeroReservar">
+          <span class="btn-reserve-glow"></span>
+          <span class="btn-reserve-text">RESERVAR LUGAR</span>
+          <i data-lucide="ticket" class="reserve-icon"></i>
+        </a>
+
+        <!-- Animated Scroll Indicator -->
+        <a href="#experiencia" class="hero-scroll-indicator" aria-label="Desplazar hacia abajo">
+          <span class="scroll-mouse">
+            <span class="scroll-wheel"></span>
+          </span>
+          <span class="scroll-text">Descubrí la experiencia</span>
+        </a>
       </div>
     </section>
 
-    <!-- SECTION 2: THE LEGEND / CRYSTAL LAKE SECRETS -->
+    <!-- SECTION 2: LA EXPERIENCIA EN VICENTE LÓPEZ -->
     <section class="story-section" id="experiencia">
       <div class="section-container">
         <div class="section-header" data-reveal="slide-up">
-          <span class="section-eyebrow">PESADILLA EN EL CAMPAMENTO</span>
-          <h2 class="section-title">EL PACTO SIN RETORNO DE LA BIG BURGER BLACK</h2>
+          <span class="section-eyebrow">CAMP CRYSTAL LAKE LLEGA A VICENTE LÓPEZ</span>
+          <h2 class="section-title">UNA NOCHE DE TERROR Y SABOR INOLVIDABLE</h2>
           <p class="section-desc">
-            En la oscuridad del lago, ningún grito se escucha... pero el crujido de esta empanada resuena en toda la noche. Un contraste siniestro entre masa negra hojaldrada y un relleno infernalmente delicioso.
+            Transformamos nuestro local en un verdadero campamento de suspenso. Preparate para una noche con proyección de la película original, ambientación de miedo y menú exclusivo.
           </p>
         </div>
 
         <div class="features-grid">
           <div class="feature-card" data-reveal="slide-left">
             <div class="card-icon-wrap icon-blood">
-              <i data-lucide="skull"></i>
+              <i data-lucide="film"></i>
             </div>
-            <h3>Masa Negra Black Obsidian</h3>
-            <p>Elaborada con tintes 100% naturales al carbón vegetal de noche eterna. Textura crocante, bordes repulgados al detalle y lluvia de sésamo tostado.</p>
+            <h3>Proyección en Pantalla Gigante</h3>
+            <p>Reviví el clásico inmortal de terror <em>Viernes 13 (1980)</em> con sonido ambiental inmersivo en el salón principal de Vicente López.</p>
           </div>
 
           <div class="feature-card featured-slasher" data-reveal="zoom-in">
             <div class="card-icon-wrap icon-red-flame">
-              <i data-lucide="flame"></i>
+              <i data-lucide="sparkles"></i>
             </div>
-            <div class="feature-badge">MÁS PEDIDA</div>
-            <h3>Carne Asada & Panceta al Fuego</h3>
-            <p>Carne de primera línea cortada a cuchillo, marinada con especias ahumadas de fogata de campamento y panceta crocante que desafía a los más valientes.</p>
+            <div class="feature-badge">EXCLUSIVO</div>
+            <h3>Experiencia Gastronómica Mi Gusto</h3>
+            <p>Disfrutá durante toda la función de tus empanadas favoritas recién salidas del horno, bebidas frías y combos temáticos especiales.</p>
           </div>
 
           <div class="feature-card" data-reveal="slide-right">
             <div class="card-icon-wrap icon-lake-teal">
-              <i data-lucide="droplet"></i>
+              <i data-lucide="ghost"></i>
             </div>
-            <h3>Cheddar Volcánico Estilo Lava</h3>
-            <p>Doble capa de auténtico queso cheddar fundido que estalla en el paladar al primer mordisco con salsa secreta ahumada de la casa.</p>
+            <h3>Ambientación Camp Crystal Lake</h3>
+            <p>Decoración temática inmersiva, niebla, la máscara y el machete de Jason, y sorpresas tenebrosas en vivo durante la velada.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: INGREDIENTS / ANATOMY -->
-    <section class="ingredients-section" id="ingredientes">
+    <!-- SECTION 3: DETALLES DEL EVENTO -->
+    <section class="event-details-section" id="detalles">
       <div class="section-container">
-        <div class="split-wrapper">
-          <div class="split-image-box" data-reveal="slide-left">
-            <div class="smoke-fx"></div>
-            <img src="assets/big-burger-black.jpg" alt="Detalle del relleno Big Burger Black" class="split-img">
-            
-            <div class="inspect-pin pin-1" style="top: 24%; left: 32%;">
-              <span class="pin-dot"></span>
-              <div class="pin-card">Pepinillos & Relish Especial</div>
-            </div>
-            <div class="inspect-pin pin-2" style="top: 48%; left: 52%;">
-              <span class="pin-dot"></span>
-              <div class="pin-card">Cheddar Líquido al Rojo Vivo</div>
-            </div>
-            <div class="inspect-pin pin-3" style="top: 74%; left: 66%;">
-              <span class="pin-dot"></span>
-              <div class="pin-card">Carne Angus Caramelizada</div>
-            </div>
+        <div class="event-details-card" data-reveal="zoom-in">
+          <div class="event-details-header">
+            <span class="section-eyebrow">COORDENADAS DE LA FUNCIÓN</span>
+            <h2 class="details-title">TODO LO QUE TENÉS QUE SABER</h2>
           </div>
 
-          <div class="split-info" data-reveal="slide-right">
-            <span class="section-eyebrow">ANATOMÍA DEL RELLENO</span>
-            <h2 class="section-title">LOS SECRETOS OCULTOS DE LA RECETA</h2>
-            
-            <ul class="ingredient-list">
-              <li>
-                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
-                <div>
-                  <strong>Masa Negra Hojaldrada 100% Comestible:</strong> Tintes naturales al carbón de leña vegetal sin agregados químicos. Suavidad extrema y textura crocante insuperable.
-                </div>
-              </li>
-              <li>
-                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
-                <div>
-                  <strong>Medallón de Carne Vacuna Premium:</strong> Sellado a la plancha a alta temperatura para retener todo el jugo natural y el auténtico sabor a parrilla.
-                </div>
-              </li>
-              <li>
-                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
-                <div>
-                  <strong>Doble Cheddar Fundido:</strong> Textura cremosa fundente que se desborda en cada mordida, sellando un pacto pecaminosamente sabroso.
-                </div>
-              </li>
-              <li>
-                <div class="li-icon"><i data-lucide="check-circle-2"></i></div>
-                <div>
-                  <strong>Smoked Bacon & Onions:</strong> Panceta ahumada en madera dura y cebollas caramelizadas lentamente en su propio jugo.
-                </div>
-              </li>
-            </ul>
+          <div class="details-grid">
+            <div class="detail-box">
+              <div class="detail-icon"><i data-lucide="calendar"></i></div>
+              <div class="detail-content">
+                <h4>Fecha</h4>
+                <p>Este Sábado</p>
+                <span class="detail-sub">Apertura 20:30 hs · Función 21:00 hs</span>
+              </div>
+            </div>
 
-            <div class="limited-box slasher-alert">
-              <img src="assets/jason-mask.png" alt="Máscara Jason" class="alert-mask-img">
-              <div>
-                <strong>¡Edición Ultralimitada Viernes 13!</strong>
-                <p>Disponible en todas las sucursales Mi Gusto y por delivery durante la temporada de Halloween o hasta agotar stock.</p>
+            <div class="detail-box">
+              <div class="detail-icon"><i data-lucide="map-pin"></i></div>
+              <div class="detail-content">
+                <h4>Ubicación</h4>
+                <p>Mi Gusto Vicente López</p>
+                <span class="detail-sub">Av. Maipú 1490, Vicente López</span>
+              </div>
+            </div>
+
+            <div class="detail-box">
+              <div class="detail-icon"><i data-lucide="users"></i></div>
+              <div class="detail-content">
+                <h4>Capacidad</h4>
+                <p>Cupos Muy Limitados</p>
+                <span class="detail-sub">Solo 50 lugares disponibles en el salón</span>
+              </div>
+            </div>
+
+            <div class="detail-box">
+              <div class="detail-icon"><i data-lucide="clapperboard"></i></div>
+              <div class="detail-content">
+                <h4>Película</h4>
+                <p>Viernes 13 (Original)</p>
+                <span class="detail-sub">Jason Voorhees · Terror Clásico 80s</span>
               </div>
             </div>
           </div>
@@ -228,38 +219,38 @@
       </div>
     </section>
 
-    <!-- SECTION 4: CRYSTAL LAKE GIVEAWAY / SORTEO MALDITO -->
-    <section class="giveaway-section" id="sorteo">
+    <!-- SECTION 4: FORMULARIO DE RESERVA OFICIAL -->
+    <section class="giveaway-section" id="reservar">
       <div class="section-container">
         <div class="giveaway-card" data-reveal="zoom-in">
           <div class="giveaway-blood-glow"></div>
           
           <div class="giveaway-header">
             <div class="giveaway-tag">
-              <i data-lucide="skull"></i>
-              SORTEO EXCLUSIVO · CAMP CRYSTAL LAKE
+              <i data-lucide="ticket"></i>
+              RESERVA DE MESA · LOCAL VICENTE LÓPEZ
             </div>
             <h2 class="giveaway-title">
-              ¿TE ANIMÁS AL PACTO DE LA <span class="text-gradient-blood">BIG BURGER BLACK</span>?
+              RESERVÁ TU LUGAR PARA LA <span class="text-gradient-blood">NOCHE VIERNES 13</span>
             </h2>
             <p class="giveaway-subtitle">
-              Ingresá tu mail para sobrevivir a la noche de brujas y participar por <strong>13 DOCENAS TERRORÍFICAS</strong> y <strong>1 AÑO DE EMPANADAS GRATIS</strong> de Mi Gusto.
+              Completá tus datos para asegurar tu mesa para este sábado en Mi Gusto Vicente López. Te confirmaremos tu lugar al instante.
             </p>
           </div>
 
-          <!-- Giveaway Form -->
-          <form class="giveaway-form" id="giveawayForm">
+          <!-- Reservation Form -->
+          <form class="giveaway-form" id="reservaForm">
             <div class="input-row">
               <div class="input-group">
-                <label for="userName">Tu Nombre o Alias de Superviviente</label>
+                <label for="userName">Nombre y Apellido</label>
                 <div class="input-wrapper">
                   <i data-lucide="user" class="input-icon"></i>
-                  <input type="text" id="userName" name="name" placeholder="Ej: Jason de Crystal Lake" required>
+                  <input type="text" id="userName" name="name" placeholder="Ej: Martín Gómez" required>
                 </div>
               </div>
 
               <div class="input-group">
-                <label for="userEmail">Tu Correo Electrónico</label>
+                <label for="userEmail">Correo Electrónico</label>
                 <div class="input-wrapper">
                   <i data-lucide="mail" class="input-icon"></i>
                   <input type="email" id="userEmail" name="email" placeholder="tucorreo@ejemplo.com" required>
@@ -269,18 +260,24 @@
 
             <div class="input-row">
               <div class="input-group">
-                <label for="userSucursal">Tu Sucursal Mi Gusto Más Cercana</label>
+                <label for="userPhone">Teléfono / WhatsApp de Contacto</label>
                 <div class="input-wrapper">
-                  <i data-lucide="map-pin" class="input-icon"></i>
-                  <select id="userSucursal" name="sucursal" required>
-                    <option value="" disabled selected>Elegí tu sucursal</option>
-                    <option value="palermo">Palermo Soho / Hollywood</option>
-                    <option value="belgrano">Belgrano</option>
-                    <option value="recoleta">Recoleta</option>
-                    <option value="caballito">Caballito</option>
-                    <option value="san_isidro">San Isidro / Zona Norte</option>
-                    <option value="ramos_mejia">Ramos Mejía / Zona Oeste</option>
-                    <option value="otra">Otra sucursal / Pedido Online</option>
+                  <i data-lucide="phone" class="input-icon"></i>
+                  <input type="tel" id="userPhone" name="phone" placeholder="Ej: 11 3456-7890" required>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="userGuests">Cantidad de Personas (Mesa)</label>
+                <div class="input-wrapper">
+                  <i data-lucide="users" class="input-icon"></i>
+                  <select id="userGuests" name="guests" required>
+                    <option value="" disabled selected>Seleccioná comensales</option>
+                    <option value="1">1 Persona (Individual)</option>
+                    <option value="2">2 Personas (Pareja / Amigos)</option>
+                    <option value="3">3 Personas</option>
+                    <option value="4">4 Personas (Mesa grupal)</option>
+                    <option value="5+">5 o más personas (Mesa especial)</option>
                   </select>
                 </div>
               </div>
@@ -290,13 +287,13 @@
               <label class="custom-checkbox">
                 <input type="checkbox" id="termsCheck" required checked>
                 <span class="checkmark"></span>
-                <span class="label-text">Acepto las bases y condiciones del Sorteo Maldito y confirmo que no le temo a Jason Voorhees.</span>
+                <span class="label-text">Confirmo asistencia para la función del día sábado en Mi Gusto Vicente López y acepto las condiciones de reserva.</span>
               </label>
             </div>
 
             <button type="submit" class="btn-submit-giveaway" id="submitBtn">
-              <span class="btn-text">¡QUIERO SOBREVIVIR Y PARTICIPAR!</span>
-              <i data-lucide="flame"></i>
+              <span class="btn-text">CONFIRMAR MI RESERVA</span>
+              <i data-lucide="ticket"></i>
             </button>
           </form>
 
@@ -305,28 +302,28 @@
             <div class="success-icon-wrap">
               <img src="assets/jason-mask.png" alt="Máscara Jason Éxito" class="success-mask-icon">
             </div>
-            <h3 class="success-title">¡SUPERVIVIENTE CONFIRMADO! 🩸</h3>
+            <h3 class="success-title">¡RESERVA CONFIRMADA! 🎟️</h3>
             <p class="success-desc">
-              Hemos registrado tu entrada al campamento (<strong id="registeredEmail"></strong>). Como recompensa por tu coraje, acá tenés un cupón exclusivo del <strong>15% OFF</strong> para pedir tu <strong>Big Burger Black</strong> ya mismo.
+              Tu lugar para la noche de <strong>Viernes 13 en Mi Gusto Vicente López</strong> está reservado para <strong id="registeredName"></strong>. Te enviamos la confirmación a <strong id="registeredEmail"></strong>.
             </p>
             <div class="coupon-box">
-              <span class="coupon-label">CÓDIGO EXCLUSIVO:</span>
-              <span class="coupon-code">JASON13</span>
-              <button type="button" class="btn-copy-code" id="copyCodeBtn" title="Copiar cupón">
-                <i data-lucide="copy"></i> Copiar Cupón
+              <span class="coupon-label">CÓDIGO DE ENTRADA:</span>
+              <span class="coupon-code" id="reservationCode">V13-VL-2026</span>
+              <button type="button" class="btn-copy-code" id="copyCodeBtn" title="Copiar código">
+                <i data-lucide="copy"></i> Copiar Código
               </button>
             </div>
-            <p class="sorteo-date">El sorteo se transmitirá en vivo el 31 de Octubre a las 21:00 hs en el Instagram oficial de @migustoempanadas.</p>
+            <p class="sorteo-date">📍 Presentate en Mi Gusto Vicente López este sábado a partir de las 20:30 hs con tu código de reserva.</p>
           </div>
 
           <!-- Micro counter & trust -->
           <div class="giveaway-footer-info">
             <div class="live-counter">
               <span class="live-blink"></span>
-              <span id="counterNumber">2.313</span> supervivientes registrados
+              <span id="counterNumber">38</span> lugares ya reservados (¡Últimos 12 cupos!)
             </div>
             <div class="safe-badge">
-              <i data-lucide="shield-check"></i> 100% Seguro · Sin spam · Solo beneficios de miedo
+              <i data-lucide="shield-check"></i> Reserva directa con confirmación inmediata
             </div>
           </div>
         </div>
@@ -339,28 +336,28 @@
     <div class="footer-container">
       <div class="footer-brand">
         <img src="assets/logo-migusto.png" alt="Mi Gusto" class="footer-logo">
-        <p>Mi Gusto © 2026 · El verdadero sabor de las empanadas premium en Argentina. Especial Viernes 13 & Big Burger Black en Camp Crystal Lake.</p>
+        <p>Mi Gusto © 2026 · El verdadero sabor de las empanadas premium en Argentina. Noche de Película Viernes 13 en el local de Vicente López.</p>
       </div>
 
       <div class="footer-links">
         <div class="link-column">
           <h4>Navegación</h4>
           <a href="#inicio">Inicio</a>
-          <a href="#experiencia">La Leyenda</a>
-          <a href="#ingredientes">Anatomía</a>
-          <a href="#sorteo">Sorteo</a>
+          <a href="#experiencia">La Experiencia</a>
+          <a href="#detalles">Coordenadas</a>
+          <a href="#reservar">Reservar Mesa</a>
         </div>
         <div class="link-column">
-          <h4>Redes de Crystal Lake</h4>
+          <h4>Contacto & Redes</h4>
           <a href="https://instagram.com" target="_blank" rel="noopener">Instagram @migusto</a>
           <a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a>
           <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
-          <a href="#">Pedir Online</a>
+          <a href="#">Vicente López: Av. Maipú 1490</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>Campaña Temática Oficial Viernes 13 de Mi Gusto. Todos los derechos reservados.</p>
+      <p>Evento Oficial Mi Gusto Vicente López · Proyección Especial Viernes 13. Cupos sujetos a capacidad del local.</p>
     </div>
   </footer>
 
