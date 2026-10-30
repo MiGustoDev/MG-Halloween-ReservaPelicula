@@ -1,5 +1,6 @@
 /**
- * Big Burger Black - Halloween Promo Interaction Engine
+ * Big Burger Black - Edición Viernes 13 (Camp Crystal Lake)
+ * Interaction & Scroll Engine
  * Mi Gusto Empanadas
  */
 
@@ -9,52 +10,144 @@ document.addEventListener('DOMContentLoaded', () => {
     window.lucide.createIcons();
   }
 
-  // 2. Spawn Ambient Flying Bats
-  spawnBats();
+  // 2. Modern Scroll Reveal & Scroll Trigger Engine
+  setupScrollReveal();
 
-  // 3. 3D Tilt Effect on Hero Burger Card
+  // 3. Lateral Lurking Slasher System (Jason & Mask sliding in from edges)
+  setupLateralLurkers();
+
+  // 4. Subtle Blood Drops Rain FX
+  spawnBloodDrops();
+
+  // 5. 3D Tilt Effect on Hero Burger Card
   setupCardTilt();
 
-  // 4. Giveaway Form Handler & LocalStorage Registration
+  // 6. Crystal Lake Giveaway Form Handler
   setupGiveawayForm();
 
-  // 5. Periodic Thunder Audio FX (Web Audio API, no rain, occasional strikes)
+  // 7. Non-constant Periodic Thunder (Web Audio API, no rain)
   setupPeriodicThunderAudio();
 
-  // 6. Dynamic Live Counter Increment
+  // 8. Survivor Counter Ticker
   setupLiveCounter();
 });
 
 /**
- * Spawns animated bats randomly across the page
+ * Modern IntersectionObserver Scroll Reveal Engine
+ * Reveals elements with data-reveal attributes smoothly as you scroll
  */
-function spawnBats() {
-  const container = document.getElementById('batsContainer');
+function setupScrollReveal() {
+  const revealElements = document.querySelectorAll('[data-reveal]');
+  if (!revealElements.length) return;
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -10% 0px',
+    threshold: 0.15
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-revealed');
+        // Optional: unobserve once revealed for performance
+        // observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(el => revealObserver.observe(el));
+}
+
+/**
+ * Lateral Lurkers: Jason Voorhees and Hockey Mask stalking from screen borders
+ * They slide out from the lateral margins based on scroll depth and mouse movement
+ */
+function setupLateralLurkers() {
+  const jasonLurker = document.getElementById('lurkerJason');
+  const maskLurker = document.getElementById('lurkerMask');
+
+  if (!jasonLurker && !maskLurker) return;
+
+  let ticking = false;
+
+  function updateLurkersOnScroll() {
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const fullHeight = document.documentElement.scrollHeight - windowHeight;
+    const progress = Math.min(1, Math.max(0, scrollY / fullHeight));
+
+    // Section 1 (Hero to Story): Jason starts peeking from right
+    if (scrollY > windowHeight * 0.25) {
+      jasonLurker?.classList.add('is-visible');
+    } else {
+      jasonLurker?.classList.remove('is-visible');
+    }
+
+    // Section 2 & 3 (Story to Ingredients): Mask emerges from left
+    if (scrollY > windowHeight * 0.75 && scrollY < windowHeight * 2.5) {
+      maskLurker?.classList.add('is-visible');
+    } else {
+      maskLurker?.classList.remove('is-visible');
+    }
+
+    // Section 4 (Sorteo / Finale): Jason stalks deeper towards form
+    if (progress > 0.65) {
+      jasonLurker?.classList.add('is-deep-stalking');
+    } else {
+      jasonLurker?.classList.remove('is-deep-stalking');
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateLurkersOnScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Initial trigger
+  updateLurkersOnScroll();
+
+  // Mouse Parallax reaction on Jason
+  window.addEventListener('mousemove', (e) => {
+    if (!jasonLurker) return;
+    const mouseXRatio = (e.clientX / window.innerWidth) - 0.5;
+    const mouseYRatio = (e.clientY / window.innerHeight) - 0.5;
+
+    if (jasonLurker.classList.contains('is-visible')) {
+      const offsetX = mouseXRatio * -15;
+      const offsetY = mouseYRatio * -12;
+      jasonLurker.style.translate = `${offsetX}px ${offsetY}px`;
+    }
+  }, { passive: true });
+}
+
+/**
+ * Ambient Falling Blood Drops Particles
+ */
+function spawnBloodDrops() {
+  const container = document.getElementById('bloodParticles');
   if (!container) return;
 
-  const batSvg = `
-    <svg viewBox="0 0 24 16" fill="#181822" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 4C10 0 6 0 3 2C0 4 0 9 2 11C4 13 8 10 11 7C11.5 8 12.5 8 13 7C16 10 20 13 22 11C24 9 24 4 21 2C18 0 14 0 12 4Z" />
-    </svg>
-  `;
+  const totalDrops = 14;
+  for (let i = 0; i < totalDrops; i++) {
+    const drop = document.createElement('div');
+    drop.className = 'blood-drop';
 
-  const totalBats = 8;
-  for (let i = 0; i < totalBats; i++) {
-    const bat = document.createElement('div');
-    bat.className = 'bat';
-    bat.innerHTML = batSvg;
-    
-    // Random timing & positioning
-    const duration = 12 + Math.random() * 14;
-    const delay = Math.random() * 10;
-    const size = 18 + Math.random() * 20;
+    const duration = 7 + Math.random() * 8;
+    const delay = Math.random() * 8;
+    const left = Math.random() * 100;
+    const height = 10 + Math.random() * 12;
 
-    bat.style.width = `${size}px`;
-    bat.style.animationDuration = `${duration}s`;
-    bat.style.animationDelay = `${delay}s`;
-    bat.style.top = `${Math.random() * 80}%`;
+    drop.style.left = `${left}%`;
+    drop.style.height = `${height}px`;
+    drop.style.animationDuration = `${duration}s`;
+    drop.style.animationDelay = `${delay}s`;
 
-    container.appendChild(bat);
+    container.appendChild(drop);
   }
 }
 
@@ -85,7 +178,7 @@ function setupCardTilt() {
 }
 
 /**
- * Handles Form submission, validation, confetti explosion, coupon copy & persistence
+ * Crystal Lake Giveaway Form Handler
  */
 function setupGiveawayForm() {
   const form = document.getElementById('giveawayForm');
@@ -96,7 +189,7 @@ function setupGiveawayForm() {
   if (!form) return;
 
   // Check if previously registered in this browser
-  const savedEmail = localStorage.getItem('bbb_registered_email');
+  const savedEmail = localStorage.getItem('bbb_crystal_lake_email');
   if (savedEmail) {
     displaySuccess(savedEmail, false);
   }
@@ -111,18 +204,18 @@ function setupGiveawayForm() {
     if (!email) return;
 
     // Save to local storage for persistent participation
-    const participants = JSON.parse(localStorage.getItem('bbb_participants') || '[]');
+    const participants = JSON.parse(localStorage.getItem('bbb_crystal_lake_participants') || '[]');
     participants.push({
       name,
       email,
       sucursal,
       date: new Date().toISOString()
     });
-    localStorage.setItem('bbb_participants', JSON.stringify(participants));
-    localStorage.setItem('bbb_registered_email', email);
+    localStorage.setItem('bbb_crystal_lake_participants', JSON.stringify(participants));
+    localStorage.setItem('bbb_crystal_lake_email', email);
 
-    // Trigger Halloween Confetti Explosion
-    fireHalloweenConfetti();
+    // Fire Slasher Confetti Explosion (Blood red, night black, lake teal)
+    fireSlasherConfetti();
 
     // Show Success State
     displaySuccess(email, true);
@@ -130,7 +223,7 @@ function setupGiveawayForm() {
 
   function displaySuccess(email, triggerScroll) {
     form.style.display = 'none';
-    successBox.style.display = 'block';
+    successBox.style.display = 'flex';
     emailDisplay.textContent = email;
 
     if (window.lucide) {
@@ -145,16 +238,14 @@ function setupGiveawayForm() {
   // Copy Coupon Code
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText('BIGBLACK15').then(() => {
+      navigator.clipboard.writeText('JASON13').then(() => {
         const originalHtml = copyBtn.innerHTML;
-        copyBtn.innerHTML = '¡Copiado! 🔥';
-        copyBtn.style.background = '#ff6a00';
-        copyBtn.style.color = '#fff';
+        copyBtn.innerHTML = '¡Copiado! 🩸';
+        copyBtn.style.background = '#8a0303';
 
         setTimeout(() => {
           copyBtn.innerHTML = originalHtml;
           copyBtn.style.background = '';
-          copyBtn.style.color = '';
           if (window.lucide) window.lucide.createIcons();
         }, 2200);
       });
@@ -163,15 +254,13 @@ function setupGiveawayForm() {
 }
 
 /**
- * Spooky Halloween Confetti (Orange, Black, Toxic Green)
+ * Slasher Confetti (Blood Red, Lake Teal, Dark Charcoal, Bone White)
  */
-function fireHalloweenConfetti() {
+function fireSlasherConfetti() {
   if (typeof confetti !== 'function') return;
 
-  const count = 200;
-  const defaults = {
-    origin: { y: 0.7 }
-  };
+  const count = 220;
+  const defaults = { origin: { y: 0.7 } };
 
   function fire(particleRatio, opts) {
     confetti({
@@ -182,32 +271,33 @@ function fireHalloweenConfetti() {
   }
 
   fire(0.25, {
-    spread: 26,
+    spread: 30,
     startVelocity: 55,
-    colors: ['#ff6a00', '#ff841f', '#000000']
+    colors: ['#e50914', '#8a0303', '#111111']
   });
   fire(0.2, {
     spread: 60,
-    colors: ['#39ff14', '#111111', '#ff6a00']
+    colors: ['#00e5a3', '#0a1410', '#e50914']
   });
   fire(0.35, {
     spread: 100,
     decay: 0.91,
     scalar: 1.2,
-    colors: ['#9b30ff', '#ff6a00', '#39ff14']
+    colors: ['#e50914', '#d7c8a8', '#00e5a3']
   });
   fire(0.1, {
     spread: 120,
     startVelocity: 25,
     decay: 0.92,
     scalar: 1.4,
-    colors: ['#ffffff', '#000000', '#ff6a00']
+    colors: ['#ffffff', '#04070a', '#e50914']
   });
 }
 
 /**
- * Web Audio API synthesizer for realistic, non-constant thunder strikes
- * Pure deep rumble and acoustic cracks (zero rain, zero continuous hiss).
+ * Periodic Thunder Audio Synthesizer (Web Audio API)
+ * Pure rolling slasher thunder (zero rain, zero continuous hiss).
+ * Occasional strikes every 25-45s after initial user gesture.
  */
 function setupPeriodicThunderAudio() {
   let audioCtx = null;
@@ -266,18 +356,17 @@ function setupPeriodicThunderAudio() {
     // Trigger visual lightning flicker in sync with the thunder
     if (overlay) {
       overlay.classList.remove('flash');
-      // Trigger reflow to restart CSS animation
       void overlay.offsetWidth;
       overlay.classList.add('flash');
     }
 
     const sampleRate = audioCtx.sampleRate;
-    const duration = 4.5; // seconds of rolling acoustic rumble
+    const duration = 4.5;
     const bufferSize = Math.floor(sampleRate * duration);
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
     const data = buffer.getChannelData(0);
 
-    // Generate Pink/Brownish noise for warm low-end rumble (avoids harsh hiss)
+    // Pink / Brown noise generator for warm deep acoustics
     let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
     for (let i = 0; i < bufferSize; i++) {
       const white = Math.random() * 2 - 1;
@@ -294,27 +383,25 @@ function setupPeriodicThunderAudio() {
     const noiseSource = audioCtx.createBufferSource();
     noiseSource.buffer = buffer;
 
-    // Filter 1: Low-pass filter to completely block high frequencies (NO rain, NO hiss)
+    // Filter 1: Low-pass filter to block high frequencies (NO rain, NO hiss)
     const lowpass = audioCtx.createBiquadFilter();
     lowpass.type = 'lowpass';
     const now = audioCtx.currentTime;
     lowpass.frequency.setValueAtTime(140, now);
-    lowpass.frequency.linearRampToValueAtTime(240, now + 0.35); // Initial clap crackle
+    lowpass.frequency.linearRampToValueAtTime(240, now + 0.35);
     lowpass.frequency.exponentialRampToValueAtTime(75, now + duration);
 
-    // Filter 2: Sub-bass resonance filter for the chest-thump rumble
+    // Filter 2: Sub-bass resonance filter for deep chest-thump punch
     const subBass = audioCtx.createBiquadFilter();
     subBass.type = 'peaking';
     subBass.frequency.value = 65;
     subBass.Q.value = 2.2;
-    subBass.gain.value = 9; // +9 dB boost to deep bass
+    subBass.gain.value = 9;
 
-    // Dynamic gain envelope: Thunder strike + rolling cloud echoes
+    // Dynamic gain envelope: Initial strike + rolling cloud echoes
     const masterGain = audioCtx.createGain();
     masterGain.gain.setValueAtTime(0.001, now);
-    // Sudden initial strike (50ms)
     masterGain.gain.exponentialRampToValueAtTime(0.32, now + 0.06);
-    // Echo waves & rolling thunder
     masterGain.gain.exponentialRampToValueAtTime(0.18, now + 0.28);
     masterGain.gain.exponentialRampToValueAtTime(0.26, now + 0.65);
     masterGain.gain.exponentialRampToValueAtTime(0.12, now + 1.2);
@@ -334,17 +421,17 @@ function setupPeriodicThunderAudio() {
 }
 
 /**
- * Micro counter that ticks up randomly to emulate live registrations
+ * Live Survivor Counter Ticker
  */
 function setupLiveCounter() {
   const el = document.getElementById('counterNumber');
   if (!el) return;
 
-  let current = 1842;
+  let current = 2313;
   setInterval(() => {
     if (Math.random() > 0.6) {
       current += Math.floor(Math.random() * 2) + 1;
       el.textContent = current.toLocaleString('es-AR');
     }
-  }, 4000);
+  }, 4500);
 }
