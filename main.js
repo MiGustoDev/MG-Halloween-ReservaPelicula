@@ -53,18 +53,18 @@ function setupNavbarScroll() {
 }
 
 /**
- * Smooth Scroll from Hero CTA to Reservation Form
+ * Smooth Scroll from Hero CTA and Nav CTA to Reservation Form
  */
 function setupReserveButtonScroll() {
-  const btn = document.getElementById('btnHeroReservar');
-  if (!btn) return;
+  const reserveBtns = document.querySelectorAll('a[href="#reservar"]');
+  const target = document.getElementById('reservar');
+  if (!target) return;
 
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const target = document.getElementById('reservar');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  reserveBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   });
 }
 
