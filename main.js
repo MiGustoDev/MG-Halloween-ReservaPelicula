@@ -54,16 +54,33 @@ function setupNavbarScroll() {
 
 /**
  * Smooth Scroll from Hero CTA and Nav CTA to Reservation Form
+ * Calibra el punto exacto debajo del navbar para encuadrar el formulario al 100%
  */
 function setupReserveButtonScroll() {
   const reserveBtns = document.querySelectorAll('a[href="#reservar"]');
-  const target = document.getElementById('reservar');
-  if (!target) return;
+  const targetCard = document.querySelector('.giveaway-card');
+  const targetSection = document.getElementById('reservar');
+
+  if (!targetSection) return;
 
   reserveBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      const navHeader = document.getElementById('siteHeader');
+      const isMobile = window.innerWidth <= 768;
+      // Altura del header revelado (52px en mobile, ~65px en desktop)
+      const navHeight = navHeader && navHeader.offsetHeight > 0 ? navHeader.offsetHeight : (isMobile ? 52 : 65);
+      const topOffset = isMobile ? 8 : 16;
+
+      const elementToScroll = targetCard || targetSection;
+      const rect = elementToScroll.getBoundingClientRect();
+      const targetY = window.scrollY + rect.top - navHeight - topOffset;
+
+      window.scrollTo({
+        top: Math.max(0, Math.round(targetY)),
+        behavior: 'smooth'
+      });
     });
   });
 }
@@ -100,6 +117,7 @@ function setupLateralLurkers() {
   const jasonLurker = document.getElementById('lurkerJason');
   const maskLurker = document.getElementById('lurkerMask');
   const detallesSection = document.getElementById('detalles');
+  const experienciaSection = document.getElementById('experiencia');
 
   if (!jasonLurker && !maskLurker) return;
 
@@ -108,6 +126,7 @@ function setupLateralLurkers() {
   function updateLurkersOnScroll() {
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
+    const isMobile = window.innerWidth <= 768;
 
     // Verificar si el usuario se posicionó en la última sección ("Todo lo que tenés que saber") o en el footer
     let isAtEndOrFooter = false;
@@ -129,27 +148,53 @@ function setupLateralLurkers() {
       return;
     }
 
-    // Sección 1 a 2: Jason comienza a asomarse por la derecha
-    if (scrollY > windowHeight * 0.35) {
-      jasonLurker?.classList.add('is-visible');
-    } else {
-      jasonLurker?.classList.remove('is-visible');
-    }
+    if (isMobile) {
+      // EN MOBILE: Control de aparición refinado para no amontonarse detrás de las tarjetas
+      // Jason se asoma sutilmente desde la esquina inferior derecha en la transición inicial
+      if (scrollY > windowHeight * 0.35 && scrollY < windowHeight * 1.8) {
+        jasonLurker?.classList.add('is-visible');
+      } else {
+        jasonLurker?.classList.remove('is-visible', 'is-deep-stalking');
+      }
 
-    // Sección 2 & 3: La máscara emerge por la izquierda
-    if (scrollY > windowHeight * 0.7) {
-      maskLurker?.classList.add('is-visible');
-    } else {
-      maskLurker?.classList.remove('is-visible');
-    }
+      // La máscara solo aparece cuando se llega a la sección "Experiencia", en la parte superior sin tapar texto
+      let inExperiencia = false;
+      if (experienciaSection) {
+        const expRect = experienciaSection.getBoundingClientRect();
+        if (expRect.top <= windowHeight * 0.65 && expRect.bottom >= windowHeight * 0.2) {
+          inExperiencia = true;
+        }
+      }
 
-    // Sección de formulario: Jason acecha más profundo
-    const fullHeight = document.documentElement.scrollHeight - windowHeight;
-    const progress = Math.min(1, Math.max(0, scrollY / fullHeight));
-    if (progress > 0.25 && progress < 0.65) {
-      jasonLurker?.classList.add('is-deep-stalking');
+      if (inExperiencia) {
+        maskLurker?.classList.add('is-visible');
+      } else {
+        maskLurker?.classList.remove('is-visible');
+      }
     } else {
-      jasonLurker?.classList.remove('is-deep-stalking');
+      // EN ESCRITORIO / NOTEBOOK (intacto)
+      // Sección 1 a 2: Jason comienza a asomarse por la derecha
+      if (scrollY > windowHeight * 0.35) {
+        jasonLurker?.classList.add('is-visible');
+      } else {
+        jasonLurker?.classList.remove('is-visible');
+      }
+
+      // Sección 2 & 3: La máscara emerge por la izquierda
+      if (scrollY > windowHeight * 0.7) {
+        maskLurker?.classList.add('is-visible');
+      } else {
+        maskLurker?.classList.remove('is-visible');
+      }
+
+      // Sección de formulario: Jason acecha más profundo
+      const fullHeight = document.documentElement.scrollHeight - windowHeight;
+      const progress = Math.min(1, Math.max(0, scrollY / fullHeight));
+      if (progress > 0.25 && progress < 0.65) {
+        jasonLurker?.classList.add('is-deep-stalking');
+      } else {
+        jasonLurker?.classList.remove('is-deep-stalking');
+      }
     }
 
     ticking = false;
