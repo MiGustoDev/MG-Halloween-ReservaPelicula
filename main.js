@@ -99,6 +99,7 @@ function setupScrollReveal() {
 function setupLateralLurkers() {
   const jasonLurker = document.getElementById('lurkerJason');
   const maskLurker = document.getElementById('lurkerMask');
+  const detallesSection = document.getElementById('detalles');
 
   if (!jasonLurker && !maskLurker) return;
 
@@ -107,25 +108,45 @@ function setupLateralLurkers() {
   function updateLurkersOnScroll() {
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
-    const fullHeight = document.documentElement.scrollHeight - windowHeight;
-    const progress = Math.min(1, Math.max(0, scrollY / fullHeight));
 
-    // Section 1 to 2: Jason starts peeking from right
+    // Verificar si el usuario se posicionó en la última sección ("Todo lo que tenés que saber") o en el footer
+    let isAtEndOrFooter = false;
+    if (detallesSection) {
+      const rect = detallesSection.getBoundingClientRect();
+      if (rect.top <= windowHeight * 0.72) {
+        isAtEndOrFooter = true;
+      }
+    }
+
+    if (isAtEndOrFooter) {
+      // Desaparecer Jason y la máscara por completo
+      jasonLurker?.classList.remove('is-visible', 'is-deep-stalking');
+      maskLurker?.classList.remove('is-visible');
+      if (jasonLurker) {
+        jasonLurker.style.translate = '';
+      }
+      ticking = false;
+      return;
+    }
+
+    // Sección 1 a 2: Jason comienza a asomarse por la derecha
     if (scrollY > windowHeight * 0.35) {
       jasonLurker?.classList.add('is-visible');
     } else {
       jasonLurker?.classList.remove('is-visible');
     }
 
-    // Section 2 & 3: Mask emerges from left
-    if (scrollY > windowHeight * 0.8 && scrollY < windowHeight * 2.6) {
+    // Sección 2 & 3: La máscara emerge por la izquierda
+    if (scrollY > windowHeight * 0.7) {
       maskLurker?.classList.add('is-visible');
     } else {
       maskLurker?.classList.remove('is-visible');
     }
 
-    // Section 4 (Reservation Form): Jason stalks deeper towards form
-    if (progress > 0.62) {
+    // Sección de formulario: Jason acecha más profundo
+    const fullHeight = document.documentElement.scrollHeight - windowHeight;
+    const progress = Math.min(1, Math.max(0, scrollY / fullHeight));
+    if (progress > 0.25 && progress < 0.65) {
       jasonLurker?.classList.add('is-deep-stalking');
     } else {
       jasonLurker?.classList.remove('is-deep-stalking');
