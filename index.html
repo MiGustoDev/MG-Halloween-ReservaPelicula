@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Big Burger Black | Edición Viernes 13 - Mi Gusto Empanadas</title>
+  <title>Viernes 13 | Camp Crystal Lake - Mi Gusto</title>
   <meta name="description" content="Sobreviví a la noche más oscura en Camp Crystal Lake. Descubrí la nueva Big Burger Black de Mi Gusto: masa negra al carbón activado, carne premium y cheddar volcánico.">
+  
+  <!-- Favicon (Máscara de Jason Voorhees) -->
+  <link rel="icon" type="image/png" href="assets/jason-mask.png">
+  <link rel="shortcut icon" type="image/png" href="assets/jason-mask.png">
+  <link rel="apple-touch-icon" href="assets/jason-mask.png">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +55,7 @@
     </div>
   </div>
 
-  <!-- Navigation Header -->
+  <!-- Navigation Header (Sin enlaces, solo logo y texto con punto rojo sin cápsula) -->
   <header class="header">
     <div class="nav-container">
       <div class="logo-wrapper">
@@ -60,83 +65,60 @@
           CAMP CRYSTAL LAKE · VIERNES 13
         </span>
       </div>
-      <nav class="nav-links">
-        <a href="#experiencia" class="nav-link">La Leyenda</a>
-        <a href="#ingredientes" class="nav-link">Anatomía</a>
-        <a href="#sorteo" class="btn-nav-slasher">
-          <i data-lucide="skull"></i>
-          <span>Sorteo Maldito</span>
-        </a>
-      </nav>
     </div>
   </header>
 
   <main>
-    <!-- HERO SECTION -->
-    <section class="hero-section" id="inicio">
-      <div class="hero-content">
-        <div class="hero-text-block" data-reveal="slide-left">
-          <div class="camp-warning-tag">
-            <span class="warning-icon">⚠️</span>
-            <span>CAMP CRYSTAL LAKE · NOCHE DE VIERNES 13</span>
-          </div>
-
-          <h1 class="hero-title">
+    <!-- HERO SECTION (CENTRAL CINEMA VIDEO SHOWCASE) -->
+    <section class="hero-section hero-cinema-section" id="inicio">
+      <div class="hero-cinema-content">
+        <div class="hero-cinema-header" data-reveal="slide-up">
+          <h1 class="hero-title hero-title-cinema">
             BIG BURGER <span class="highlight-slasher">BLACK</span>
           </h1>
-
-          <p class="hero-subtitle">
-            Nacida en las aguas profundas y sombrías de Crystal Lake. La leyenda del asesino del machete se une a la empanada insignia de Mi Gusto: masa negra artesanal con carbón vegetal activado, carne de novillo asada a fuego ardiente y un torrente de cheddar volcánico.
+          <p class="hero-subtitle hero-subtitle-cinema">
+            El tráiler oficial de la noche más oscura. Preparate para revivir el terror en Camp Crystal Lake junto a Mi Gusto.
           </p>
+        </div>
 
-          <div class="hero-cta-group">
-            <a href="#sorteo" class="btn-primary-slasher">
-              <span>SOBREVIVIR AL SORTEO (1 AÑO GRATIS)</span>
-              <i data-lucide="flame"></i>
-            </a>
-            <a href="#experiencia" class="btn-secondary-dark">
-              <span>EXPLORAR LA LEYENDA</span>
-              <i data-lucide="chevron-down"></i>
-            </a>
-          </div>
+        <!-- Video Player Container -->
+        <div class="hero-video-container" data-reveal="zoom-in">
+          <div class="video-ambient-glow"></div>
+          <div class="video-wrapper">
+            <video 
+              id="heroVideo" 
+              class="hero-video-player" 
+              controls 
+              playsinline 
+              poster="assets/crystal-lake-bg.jpg" 
+              preload="metadata"
+            >
+              <source src="assets/video.mp4" type="video/mp4">
+              Tu navegador no soporta el formato de video.
+            </video>
 
-          <div class="hero-stats">
-            <div class="stat-item">
-              <span class="stat-number">100%</span>
-              <span class="stat-label">Carne vacuna premium</span>
-            </div>
-            <div class="stat-separator"></div>
-            <div class="stat-item">
-              <span class="stat-number">BLACK</span>
-              <span class="stat-label">Masa carbón activado</span>
-            </div>
-            <div class="stat-separator"></div>
-            <div class="stat-item">
-              <span class="stat-number">LAVA</span>
-              <span class="stat-label">Cheddar fundido & Bacon</span>
+            <!-- Video Poster / Play Button Overlay -->
+            <div class="video-poster-overlay" id="videoPlayOverlay">
+              <div class="play-btn-pulse">
+                <i data-lucide="play" class="play-icon"></i>
+              </div>
+              <div class="video-overlay-text">
+                <span class="video-tag">TRÁILER OFICIAL · VIERNES 13</span>
+                <span class="video-hint">Clic para reproducir video</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="hero-visual" data-reveal="slide-right">
-          <div class="burger-portal">
-            <div class="portal-slash-ring"></div>
-            <div class="blood-mist-aura"></div>
-            
-            <div class="burger-card-3d" id="burgerCard">
-              <img src="assets/big-burger-black.jpg" alt="Big Burger Black Edición Viernes 13 Mi Gusto" class="burger-hero-img">
-              
-              <!-- Floating badges with Jason motif -->
-              <div class="floating-badge badge-top-right">
-                <img src="assets/jason-mask.png" alt="Máscara Jason" class="badge-mini-mask">
-                <span>Viernes 13</span>
-              </div>
-              <div class="floating-badge badge-bottom-left">
-                <i data-lucide="sparkles"></i>
-                <span>Edición Crystal Lake</span>
-              </div>
-            </div>
-          </div>
+        <div class="hero-cta-group cinema-cta" data-reveal="slide-up">
+          <a href="#sorteo" class="btn-primary-slasher">
+            <span>PARTICIPAR DEL SORTEO</span>
+            <i data-lucide="skull"></i>
+          </a>
+          <a href="#experiencia" class="btn-secondary-dark">
+            <span>EXPLORAR LA LEYENDA</span>
+            <i data-lucide="chevron-down"></i>
+          </a>
         </div>
       </div>
     </section>

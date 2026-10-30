@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Subtle Blood Drops Rain FX
   spawnBloodDrops();
 
-  // 5. 3D Tilt Effect on Hero Burger Card
-  setupCardTilt();
+  // 5. Hero Video Player Interaction
+  setupHeroVideo();
 
   // 6. Crystal Lake Giveaway Form Handler
   setupGiveawayForm();
@@ -31,6 +31,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // 8. Survivor Counter Ticker
   setupLiveCounter();
 });
+
+/**
+ * Hero Video Player Handler
+ * Handles play/pause and custom overlay transitions
+ */
+function setupHeroVideo() {
+  const video = document.getElementById('heroVideo');
+  const overlay = document.getElementById('videoPlayOverlay');
+  if (!video || !overlay) return;
+
+  overlay.addEventListener('click', () => {
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+    video.play().catch(err => {
+      console.log('Video playback note:', err);
+    });
+  });
+
+  video.addEventListener('play', () => {
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+  });
+
+  video.addEventListener('pause', () => {
+    if (video.currentTime === 0 || video.ended) {
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+    }
+  });
+}
 
 /**
  * Modern IntersectionObserver Scroll Reveal Engine
