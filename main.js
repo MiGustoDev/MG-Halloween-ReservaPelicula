@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. Subtle Blood Drops Rain Particles
   spawnBloodDrops();
 
-  // 8. Non-constant Periodic Thunder (Web Audio API, no rain)
+  // 8. Dynamic Scroll Blood Splatters FX
+  setupScrollBloodSplatters();
+
+  // 9. Non-constant Periodic Thunder (Web Audio API, no rain)
   setupPeriodicThunderAudio();
 });
 
@@ -128,9 +131,15 @@ function setupLateralLurkers() {
     const windowHeight = window.innerHeight;
     const isMobile = window.innerWidth <= 768;
 
-    // Verificar si el usuario se posicionó en la última sección ("Todo lo que tenés que saber") o en el footer
+    // Verificar si el usuario se posicionó en el footer o al final de la página
     let isAtEndOrFooter = false;
-    if (detallesSection) {
+    const footerElement = document.querySelector('footer.footer');
+    if (footerElement) {
+      const rect = footerElement.getBoundingClientRect();
+      if (rect.top <= windowHeight * 0.85) {
+        isAtEndOrFooter = true;
+      }
+    } else if (detallesSection) {
       const rect = detallesSection.getBoundingClientRect();
       if (rect.top <= windowHeight * 0.72) {
         isAtEndOrFooter = true;
@@ -149,19 +158,33 @@ function setupLateralLurkers() {
     }
 
     if (isMobile) {
-      // EN MOBILE: Control de aparición refinado para no amontonarse detrás de las tarjetas
-      // Jason se asoma sutilmente desde la esquina inferior derecha en la transición inicial
-      if (scrollY > windowHeight * 0.35 && scrollY < windowHeight * 1.8) {
+      // EN MOBILE: Aparición dinámica, imponente y cinematográfica sin obstaculizar lectura
+      // 1. Jason con machete en el lateral derecho: aparece entre el final del Hero y el formulario de reserva
+      const formSection = document.getElementById('reservar');
+      let nearForm = false;
+      if (formSection) {
+        const fRect = formSection.getBoundingClientRect();
+        if (fRect.top <= windowHeight * 0.85 && fRect.bottom >= windowHeight * 0.15) {
+          nearForm = true;
+        }
+      }
+
+      if (nearForm) {
         jasonLurker?.classList.add('is-visible');
+        if (scrollY > windowHeight * 0.8) {
+          jasonLurker?.classList.add('is-deep-stalking');
+        } else {
+          jasonLurker?.classList.remove('is-deep-stalking');
+        }
       } else {
         jasonLurker?.classList.remove('is-visible', 'is-deep-stalking');
       }
 
-      // La máscara solo aparece cuando se llega a la sección "Experiencia", en la parte superior sin tapar texto
+      // 2. Máscara de Jason en el lateral izquierdo: aparece en la sección de Experiencia
       let inExperiencia = false;
       if (experienciaSection) {
         const expRect = experienciaSection.getBoundingClientRect();
-        if (expRect.top <= windowHeight * 0.65 && expRect.bottom >= windowHeight * 0.2) {
+        if (expRect.top <= windowHeight * 0.75 && expRect.bottom >= windowHeight * 0.15) {
           inExperiencia = true;
         }
       }
@@ -250,6 +273,100 @@ function spawnBloodDrops() {
 }
 
 /**
+ * Dynamic Scroll Blood Splatters Engine
+ * Dispara salpicaduras y manchas de sangre orgánicas en los bordes y esquinas
+ * al deslizar por la página, acentuando el clímax de terror de Viernes 13.
+ */
+function setupScrollBloodSplatters() {
+  const splatterLayer = document.getElementById('bloodSplatterLayer');
+  if (!splatterLayer) return;
+
+  let lastScrollY = window.scrollY;
+  let accumulatedDelta = 0;
+  let lastSplatTime = 0;
+
+  // Límite de manchas activas en pantalla simultáneamente para alto rendimiento
+  const MAX_ACTIVE_SPLATS = 6;
+
+  function createSplatter(xPercent, yPercent) {
+    const splat = document.createElement('div');
+    splat.className = 'scroll-blood-splat';
+
+    // Variación orgánica de tamaño (32px a 78px)
+    const size = 34 + Math.random() * 42;
+    // Borde irregular con border-radius orgánico de gota de sangre
+    const r1 = 35 + Math.random() * 30;
+    const r2 = 35 + Math.random() * 30;
+    const r3 = 35 + Math.random() * 30;
+    const r4 = 35 + Math.random() * 30;
+    const rot = (Math.random() * 360).toFixed(0);
+
+    splat.style.width = `${size}px`;
+    splat.style.height = `${size * (1 + Math.random() * 0.35)}px`;
+    splat.style.borderRadius = `${r1}% ${100 - r1}% ${r2}% ${100 - r2}% / ${r3}% ${r4}% ${100 - r4}% ${100 - r3}%`;
+    splat.style.left = `${xPercent}%`;
+    splat.style.top = `${yPercent}%`;
+    splat.style.setProperty('--rot', `${rot}deg`);
+
+    // Crear 2 o 3 micro gotas satélites desprendidas
+    const subDropsCount = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < subDropsCount; i++) {
+      const sub = document.createElement('div');
+      sub.className = 'blood-droplet-sub';
+      const subSize = 4 + Math.random() * 8;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = size * 0.7 + Math.random() * (size * 0.6);
+      sub.style.width = `${subSize}px`;
+      sub.style.height = `${subSize}px`;
+      sub.style.left = `${size / 2 + Math.cos(angle) * dist}px`;
+      sub.style.top = `${size / 2 + Math.sin(angle) * dist}px`;
+      splat.appendChild(sub);
+    }
+
+    splatterLayer.appendChild(splat);
+
+    // Limpieza al terminar la animación
+    setTimeout(() => {
+      splat.remove();
+    }, 1800);
+
+    // Control de límite máximo
+    while (splatterLayer.children.length > MAX_ACTIVE_SPLATS) {
+      splatterLayer.firstElementChild?.remove();
+    }
+  }
+
+  function onScroll() {
+    const currentScrollY = window.scrollY;
+    const delta = Math.abs(currentScrollY - lastScrollY);
+    lastScrollY = currentScrollY;
+    accumulatedDelta += delta;
+
+    const now = performance.now();
+
+    // Disparar cada ~180px de scroll acumulado y con cooldown mínimo de 220ms
+    if (accumulatedDelta > 190 && now - lastSplatTime > 220) {
+      accumulatedDelta = 0;
+      lastSplatTime = now;
+
+      // Ubicación perimetral aleatoria: izquierda, derecha o cuadrante superior/inferior
+      // para dar la sensación de mancha en la lente de la cámara sin tapar el texto central
+      const spawnZones = [
+        { x: 3 + Math.random() * 16, y: 15 + Math.random() * 70 }, // Lateral izquierdo
+        { x: 80 + Math.random() * 17, y: 15 + Math.random() * 70 }, // Lateral derecho
+        { x: 8 + Math.random() * 84, y: 4 + Math.random() * 12 },   // Franja superior
+        { x: 8 + Math.random() * 84, y: 84 + Math.random() * 12 }  // Franja inferior
+      ];
+
+      const chosenZone = spawnZones[Math.floor(Math.random() * spawnZones.length)];
+      createSplatter(chosenZone.x, chosenZone.y);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+/**
  * Intelligent Capacity Manager (Max 34 places)
  * Recauda reservas reales registradas en localStorage
  */
@@ -281,8 +398,11 @@ function updateCapacityDisplay() {
   }
 }
 
+// URL del Webhook de Google Apps Script para guardar en Google Sheets
+const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzvrQStncoiZF2LTtc_2_0eQat0mTtrR2u4jQc7OTOP7oIUaNB16rRl3jNQX8dcRwjFUQ/exec';
+
 /**
- * Official Reservation Form Handler
+ * Official Reservation Form Handler (con Google Sheets & LocalStorage)
  */
 function setupReservationForm() {
   const form = document.getElementById('reservaForm');
@@ -291,13 +411,14 @@ function setupReservationForm() {
   const phoneDisplay = document.getElementById('registeredPhone');
   const guestsDisplay = document.getElementById('registeredGuests');
   const copyBtn = document.getElementById('copyCodeBtn');
+  const submitBtn = document.getElementById('submitBtn');
 
   // Initialize capacity counter on load
   updateCapacityDisplay();
 
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const name = document.getElementById('userName').value.trim();
@@ -306,14 +427,44 @@ function setupReservationForm() {
 
     if (!name || !phone || !guests) return;
 
-    // Save to local storage for persistence
-    const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas') || '[]');
-    reservations.push({
+    // Estado de carga visual en el botón
+    const originalBtnContent = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>GUARDANDO RESERVA...</span> <i data-lucide="loader-2" class="spin-loader"></i>`;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    const payload = {
+      timestamp: new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }),
       name,
       phone,
       guests,
       sucursal: 'Vicente López',
-      date: new Date().toISOString()
+      evento: 'Viernes 13 (Halloween)'
+    };
+
+    // 1. Guardar en Google Sheets si la URL está configurada
+    if (GOOGLE_SHEETS_WEBHOOK_URL) {
+      try {
+        await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors', // Evita bloqueos de CORS con Google Apps Script
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('Error al enviar a Google Sheets, guardando respaldo local:', err);
+      }
+    }
+
+    // 2. Guardar siempre en LocalStorage como resguardo
+    const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas') || '[]');
+    reservations.push({
+      ...payload,
+      id: `V13-${Date.now()}`
     });
     localStorage.setItem('migusto_vl_reservas', JSON.stringify(reservations));
 
@@ -325,6 +476,11 @@ function setupReservationForm() {
 
     // Show Success State
     form.style.display = 'none';
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnContent;
+    }
+
     if (successBox) {
       successBox.style.display = 'flex';
       if (nameDisplay) nameDisplay.textContent = name;

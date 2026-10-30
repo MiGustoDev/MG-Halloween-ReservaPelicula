@@ -191,6 +191,94 @@ body.friday-theme {
 }
 
 /* ==========================================================================
+   Interactive Scroll Blood Splatters FX
+   ========================================================================== */
+.blood-splatter-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 85;
+  overflow: hidden;
+}
+
+.scroll-blood-splat {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff1122 0%, #b8000a 45%, #660005 85%, transparent 100%);
+  filter: drop-shadow(0 0 8px rgba(184, 0, 10, 0.75));
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+  animation: splatPop 1.8s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+.scroll-blood-splat::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* Gotas satélite que salpican alrededor de la mancha principal */
+.blood-droplet-sub {
+  position: absolute;
+  border-radius: 50%;
+  background: #a30009;
+  box-shadow: 0 0 6px rgba(229, 9, 20, 0.8);
+  pointer-events: none;
+}
+
+@keyframes splatPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.15) rotate(0deg);
+  }
+  15% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.1) rotate(var(--rot, 12deg));
+  }
+  30% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1) rotate(var(--rot, 12deg));
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(-50%, calc(-50% + 15px)) scale(0.98, 1.15) rotate(var(--rot, 12deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 35px)) scale(0.9, 1.3) rotate(var(--rot, 12deg));
+  }
+}
+
+/* Ambient Blood Rain Drops */
+.blood-particles-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.blood-drop {
+  position: absolute;
+  top: -30px;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--blood-red), #500);
+  opacity: 0.55;
+  border-radius: 0 0 3px 3px;
+  animation: bloodRainDrop linear infinite;
+}
+
+@keyframes bloodRainDrop {
+  0% { transform: translateY(-20px); opacity: 0; }
+  10% { opacity: 0.65; }
+  90% { opacity: 0.65; }
+  100% { transform: translateY(105vh); opacity: 0; }
+}
+
+/* ==========================================================================
    LATERAL LURKERS (Assets creeping in from edges on scroll)
    ========================================================================== */
 .lateral-lurkers-wrapper {
@@ -457,25 +545,41 @@ body.friday-theme {
   pointer-events: none;
 }
 
+.video-desktop {
+  display: block;
+}
+
+.video-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .video-desktop {
+    display: none !important;
+  }
+  .video-mobile {
+    display: block !important;
+  }
+}
+
 .hero-video-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, rgba(4, 7, 10, 0.35) 0%, rgba(4, 7, 10, 0.85) 85%, rgba(4, 7, 10, 0.98) 100%),
-              linear-gradient(to bottom, rgba(4, 7, 10, 0.6) 0%, transparent 40%, rgba(4, 7, 10, 0.95) 100%);
-  z-index: 1;
-  pointer-events: none;
+  display: none !important;
 }
 
 .hero-center-box {
-  position: relative;
-  z-index: 2;
+  position: absolute;
+  top: auto;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%) !important;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 26px;
-  padding: 0 24px;
-  max-width: 860px;
+  padding: 0 16px;
+  width: auto;
+  margin: 0 auto;
 }
 
 .hero-brand-logo {
@@ -538,109 +642,271 @@ body.friday-theme {
 }
 
 /* ==========================================================================
-   Event Details Section
+   Unified Experience & Details Section (Merged Layout)
    ========================================================================== */
-.event-details-section {
-  position: relative;
-  padding: 30px 24px 80px;
-  z-index: 10;
-}
-
-.event-details-card {
-  max-width: 1120px;
-  margin: 0 auto;
-  background: var(--bg-card);
-  border: 1px solid rgba(229, 9, 20, 0.35);
-  border-radius: var(--radius-lg);
-  padding: 50px 40px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(229, 9, 20, 0.2);
-  backdrop-filter: blur(14px);
-}
-
-.event-details-header {
-  text-align: center;
-  margin-bottom: 36px;
-}
-
-.details-title {
-  font-family: var(--font-slasher);
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
-  font-weight: 900;
-  margin-top: 8px;
-}
-
-.details-grid {
+.unified-experience-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 32px;
+  align-items: stretch;
 }
 
-.detail-box {
+/* Columna Izquierda: Tarjeta Principal de Proyección & Experiencia */
+.experience-main-card {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border-color: rgba(229, 9, 20, 0.45);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(229, 9, 20, 0.2);
+  background: linear-gradient(175deg, rgba(16, 24, 32, 0.92) 0%, rgba(8, 14, 18, 0.95) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Watermark de Jason en la tarjeta de experiencia */
+.card-jason-watermark {
+  position: absolute;
+  bottom: -15px;
+  right: -20px;
+  width: 270px;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 25px rgba(229, 9, 20, 0.45));
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.experience-main-card:hover .card-jason-watermark {
+  opacity: 0.32;
+  transform: scale(1.06) translateY(-8px);
+}
+
+.jason-watermark-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Stalker de Jason en la cabecera de la tarjeta de reserva */
+.card-jason-stalker {
+  position: absolute;
+  top: -26px;
+  right: 20px;
+  width: 58px;
+  height: 58px;
+  z-index: 20;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 14px rgba(229, 9, 20, 0.7));
+  animation: maskFloat 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.jason-stalker-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.experience-card-top,
+.experience-card-body,
+.experience-highlights {
+  position: relative;
+  z-index: 2;
+}
+
+.experience-main-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--blood-red), transparent);
+}
+
+.experience-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.experience-card-top .feature-badge {
+  position: static;
+}
+
+.experience-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.experience-card-title {
+  font-family: var(--font-slasher);
+  font-size: clamp(1.7rem, 2.5vw, 2.2rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.18;
+  letter-spacing: 0.5px;
+}
+
+.experience-lead {
+  font-family: var(--font-slasher);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--blood-red);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.experience-text {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.experience-highlights {
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
-  background: rgba(4, 7, 10, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 24px 20px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.highlight-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(229, 9, 20, 0.12);
+  border: 1px solid rgba(229, 9, 20, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.highlight-chip i,
+.highlight-chip svg {
+  width: 16px;
+  height: 16px;
+  color: var(--blood-red);
+}
+
+/* Columna Derecha: Stack de Tarjetas de Coordenadas */
+.experience-details-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  height: 100%;
+}
+
+.detail-box-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  padding: 30px 28px;
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   transition: var(--transition-smooth);
 }
 
-.detail-box:hover {
+.detail-box-card:hover {
   transform: translateY(-4px);
   border-color: rgba(229, 9, 20, 0.4);
-  background: rgba(8, 14, 18, 0.9);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
 }
 
-.detail-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  background: rgba(229, 9, 20, 0.15);
-  color: var(--blood-red);
+.detail-box-card.highlight-border {
+  border-color: rgba(0, 229, 163, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 163, 0.12);
+}
+
+.detail-box-card.highlight-border:hover {
+  border-color: rgba(0, 229, 163, 0.6);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 229, 163, 0.2);
+}
+
+.detail-box-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  border: 1px solid rgba(229, 9, 20, 0.3);
+  gap: 16px;
 }
 
-.detail-content h4 {
+.detail-card-tag {
+  display: block;
   font-family: var(--font-slasher);
-  font-size: 0.82rem;
-  letter-spacing: 1.5px;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
   color: var(--text-muted);
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
-.detail-content p {
-  font-size: 1.15rem;
+.detail-card-title {
+  font-family: var(--font-slasher);
+  font-size: 1.35rem;
   font-weight: 800;
   color: #fff;
-  margin-bottom: 4px;
+  line-height: 1.2;
 }
 
-.detail-sub {
-  font-size: 0.82rem;
-  color: var(--text-muted);
+.detail-box-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 12px;
+  background: rgba(4, 7, 10, 0.5);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.info-row .row-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--blood-red);
+}
+
+.info-row .row-icon.text-blood {
+  color: var(--blood-red);
+}
+
+.info-row .row-icon.text-teal {
+  color: var(--crystal-lake-teal);
+}
+
+.info-row .row-icon.text-white {
+  color: #fff;
+}
+
+.info-row strong {
   display: block;
-  line-height: 1.4;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 3px;
 }
 
-@media (max-width: 900px) {
-  .details-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.info-row .detail-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
 }
 
-@media (max-width: 580px) {
-  .details-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .event-details-card {
-    padding: 24px 14px;
-  }
+.text-glow-red {
+  color: #ff3344 !important;
+  text-shadow: 0 0 12px rgba(255, 23, 68, 0.5);
 }
 
 /* ==========================================================================
@@ -927,7 +1193,7 @@ body.friday-theme {
   padding: 38px 46px 28px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(229, 9, 20, 0.25);
   backdrop-filter: blur(16px);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .giveaway-blood-glow {
@@ -1125,6 +1391,21 @@ body.friday-theme {
 .btn-submit-giveaway:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 0 35px var(--blood-red);
+}
+
+.btn-submit-giveaway:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spin-loader {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Success Box */
@@ -1425,7 +1706,8 @@ body.friday-theme {
     grid-template-columns: 1fr;
   }
 
-  .features-grid {
+  .features-grid,
+  .unified-experience-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1474,8 +1756,12 @@ body.friday-theme {
   }
 
   .hero-center-box {
-    gap: 20px;
+    top: auto;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%) !important;
     padding: 0 16px;
+    width: auto;
   }
 
   .input-row {
@@ -1491,12 +1777,21 @@ body.friday-theme {
   }
 
   .giveaway-card {
-    padding: 20px 16px 16px;
+    padding: 24px 16px 16px;
     border-radius: var(--radius-md);
     max-width: 100%;
     margin: 0 auto;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.95), 0 0 25px rgba(229, 9, 20, 0.2);
     scroll-margin-top: 65px;
+    overflow: visible;
+  }
+
+  .card-jason-stalker {
+    top: -22px;
+    right: 14px;
+    width: 46px;
+    height: 46px;
+    z-index: 25;
   }
 
   .giveaway-header {
@@ -1576,7 +1871,7 @@ body.friday-theme {
     white-space: normal;
   }
 
-  /* Section 3: Una noche de terror y sabor inolvidable (2 en fila 1, 1 en fila 2) */
+  /* Section 3: Una noche de terror y sabor inolvidable (Experiencia & Coordenadas Unificadas) */
   .story-section {
     padding: 60px 16px;
   }
@@ -1596,98 +1891,59 @@ body.friday-theme {
     line-height: 1.5;
   }
 
-  .features-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px;
+  .unified-experience-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px;
   }
 
-  .features-grid .feature-card:nth-child(1),
-  .features-grid .feature-card:nth-child(2) {
-    grid-column: span 1;
+  .experience-main-card {
+    padding: 24px 18px;
   }
 
-  .features-grid .feature-card:nth-child(3) {
-    grid-column: 1 / -1; /* Fila 2 completa */
-  }
-
-  .feature-card {
-    padding: 18px 14px;
-    gap: 10px;
-    border-radius: var(--radius-md);
-  }
-
-  .feature-card h3 {
-    font-size: 0.96rem;
-    line-height: 1.25;
-  }
-
-  .feature-card p {
-    font-size: 0.78rem;
-    line-height: 1.4;
-  }
-
-  .card-icon-wrap {
-    width: 38px;
-    height: 38px;
-    font-size: 1.1rem;
-    border-radius: var(--radius-sm);
-  }
-
-  .feature-badge {
-    top: 10px;
-    right: 10px;
-    font-size: 0.62rem;
-    padding: 2px 7px;
-  }
-
-  /* Section 4: Todo lo que tenés que saber (2x2 grid) */
-  .event-details-section {
-    padding: 50px 16px;
-  }
-
-  .event-details-card {
-    padding: 24px 14px;
-    border-radius: var(--radius-md);
-  }
-
-  .details-title {
+  .experience-card-title {
     font-size: 1.35rem;
   }
 
-  .details-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
+  .experience-lead {
+    font-size: 0.98rem;
+  }
+
+  .experience-text {
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .experience-highlights {
+    margin-top: 18px;
+    padding-top: 14px;
+    gap: 8px;
+  }
+
+  .highlight-chip {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+
+  .detail-box-card {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .detail-card-title {
+    font-size: 1.15rem;
+  }
+
+  .info-row {
+    padding: 8px 10px;
     gap: 10px;
   }
 
-  .detail-box {
-    padding: 14px 10px;
-    gap: 6px;
-    border-radius: var(--radius-sm);
+  .info-row strong {
+    font-size: 0.92rem;
   }
 
-  .detail-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-    margin-bottom: 2px;
-  }
-
-  .detail-content h4 {
-    font-size: 0.68rem;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-  }
-
-  .detail-content p {
-    font-size: 0.9rem;
-    margin-bottom: 2px;
-  }
-
-  .detail-sub {
-    font-size: 0.68rem;
-    line-height: 1.3;
+  .info-row .detail-sub {
+    font-size: 0.78rem;
   }
 
   .footer-container {
@@ -1699,30 +1955,40 @@ body.friday-theme {
     display: none;
   }
 
-  /* Assets laterales en Mobile: Re-posicionados para no tapar contenido ni quedar atravesados */
+  /* Assets laterales de Jason en Mobile: Presencia cinematográfica, imponente y limpia */
   .lurker-right {
-    width: 130px;
-    max-width: 32vw;
+    width: 175px;
+    max-width: 44vw;
     top: auto;
-    bottom: 6%;
+    bottom: 4%;
     right: 0;
+    filter: drop-shadow(-10px 8px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(229, 9, 20, 0.65));
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
   }
 
   .lurker-left {
-    width: 90px;
-    max-width: 24vw;
-    top: 10%;
+    width: 125px;
+    max-width: 32vw;
+    top: 14%;
     left: 0;
+    filter: drop-shadow(10px 10px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(0, 229, 163, 0.55));
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
   }
 
   .lurker-right.is-visible {
-    transform: translateX(42%);
-    opacity: 0.6;
+    transform: translateX(28%);
+    opacity: 0.92;
+  }
+
+  .lurker-right.is-deep-stalking {
+    transform: translateX(18%);
+    opacity: 1;
+    filter: drop-shadow(-15px 10px 30px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 30px rgba(229, 9, 20, 0.85));
   }
 
   .lurker-left.is-visible {
-    transform: translateX(-38%) rotate(-6deg);
-    opacity: 0.6;
+    transform: translateX(-18%) rotate(-6deg);
+    opacity: 0.92;
   }
 }
 

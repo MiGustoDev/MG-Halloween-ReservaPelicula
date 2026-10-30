@@ -9,11 +9,11 @@
 
   <!-- Open Graph / WhatsApp / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://migusto.com.ar/halloween/">
+  <meta property="og:url" content="https://migusto.com.ar/Halloween/">
   <meta property="og:title" content="Viernes 13 en Mi Gusto | Noche de Película en Vicente López">
   <meta property="og:description" content="Viví la noche de cine y terror en Mi Gusto Vicente López. Proyección exclusiva de Viernes 13 este sábado. ¡Reservá tu lugar ahora, cupos muy limitados!">
-  <meta property="og:image" content="https://migusto.com.ar/halloween/og-image.jpg">
-  <meta property="og:image:secure_url" content="https://migusto.com.ar/halloween/og-image.jpg">
+  <meta property="og:image" content="https://migusto.com.ar/Halloween/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://migusto.com.ar/Halloween/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -23,10 +23,10 @@
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://migusto.com.ar/halloween/">
+  <meta name="twitter:url" content="https://migusto.com.ar/Halloween/">
   <meta name="twitter:title" content="Viernes 13 en Mi Gusto | Noche de Película en Vicente López">
   <meta name="twitter:description" content="Viví la noche de cine y terror en Mi Gusto Vicente López. Proyección exclusiva de Viernes 13 este sábado. ¡Reservá tu lugar ahora, cupos muy limitados!">
-  <meta name="twitter:image" content="https://migusto.com.ar/halloween/og-image.jpg">
+  <meta name="twitter:image" content="https://migusto.com.ar/Halloween/og-image.jpg">
   
   <!-- Favicon (Máscara de Jason Voorhees) -->
   <link rel="icon" type="image/png" href="assets/jason-mask.png">
@@ -53,6 +53,7 @@
   <!-- Background Lake Mist & Fog Overlay -->
   <div class="lake-fog-layer"></div>
   <div class="blood-particles-container" id="bloodParticles"></div>
+  <div class="blood-splatter-layer" id="bloodSplatterLayer"></div>
 
   <!-- Cinematic Glow Orbs -->
   <div class="glow-orb orb-blood"></div>
@@ -61,11 +62,11 @@
 
   <!-- LATERAL LURKERS (Jason & Mask lurking from screen edges) -->
   <div class="lateral-lurkers-wrapper" id="lurkersWrapper" aria-hidden="true">
-    <!-- Right Lurker: Jason Voorhees with Machete -->
+    <!-- Right Lurker: Jason Voorhees with Machete (Nuevo Asset Profesional Full HD) -->
     <div class="lurker-actor lurker-right" id="lurkerJason">
       <div class="lurker-glow"></div>
       <div class="machete-slash-gleam"></div>
-      <img src="assets/jason-full.png" alt="Jason Voorhees acechando" class="lurker-jason-img">
+      <img src="assets/jason-slasher-pro.png" alt="Jason Voorhees acechando" class="lurker-jason-img">
     </div>
 
     <!-- Left Lurker: Jason Iconic Hockey Mask -->
@@ -101,26 +102,37 @@
   <main>
     <!-- HERO SECTION (FULLSCREEN VIDEO BACKGROUND + CENTER LOGO & RESERVAR BUTTON) -->
     <section class="hero-fullscreen" id="inicio">
-      <!-- Background Fullscreen Video -->
+      <!-- Background Responsive Video: Desktop (web.mp4) & Mobile (app.mp4) -->
       <video 
-        class="hero-bg-video" 
-        id="heroBgVideo" 
+        class="hero-bg-video video-desktop" 
+        id="heroBgVideoWeb" 
         autoplay 
         muted 
         loop 
         playsinline 
+        preload="auto"
         poster="assets/crystal-lake-bg.jpg"
       >
-        <source src="assets/video.mp4" type="video/mp4">
+        <source src="videos/web.mp4" type="video/mp4">
       </video>
 
-      <!-- Vignette & Mist Layer for Contrast -->
-      <div class="hero-video-vignette"></div>
+      <video 
+        class="hero-bg-video video-mobile" 
+        id="heroBgVideoApp" 
+        autoplay 
+        muted 
+        loop 
+        playsinline 
+        preload="auto"
+        poster="assets/crystal-lake-bg.jpg"
+      >
+        <source src="videos/app.mp4" type="video/mp4">
+      </video>
 
-      <!-- Center Box: Logo Mi Gusto + Botón Reservar -->
-      <div class="hero-center-box" data-reveal="zoom-in">
-        <img src="assets/logo-migusto.png" alt="Mi Gusto" class="hero-brand-logo">
+      <!-- Video Fullscreen 100% Brillo Natural -->
 
+      <!-- Center Box: Botón Reservar en la parte inferior para no tapar el video -->
+      <div class="hero-center-box hero-bottom-cta" data-reveal="zoom-in">
         <!-- Botón Reservar: Scrollea automáticamente hacia abajo al formulario -->
         <a href="#reservar" class="btn-hero-reserve" id="btnHeroReservar">
           <span class="btn-reserve-glow"></span>
@@ -136,6 +148,10 @@
         <div class="giveaway-card" data-reveal="zoom-in">
           <div class="giveaway-blood-glow"></div>
           
+          <div class="card-jason-stalker" aria-hidden="true">
+            <img src="assets/jason-mask.png" alt="Máscara Jason" class="jason-stalker-img">
+          </div>
+
           <div class="giveaway-header">
             <div class="giveaway-tag">
               <i data-lucide="ticket"></i>
@@ -225,7 +241,7 @@
       </div>
     </section>
 
-    <!-- SECTION 3: LA EXPERIENCIA EN VICENTE LÓPEZ -->
+    <!-- SECTION 3: EXPERIENCIA & COORDENADAS UNIFICADAS -->
     <section class="story-section" id="experiencia">
       <div class="section-container">
         <div class="section-header" data-reveal="slide-up">
@@ -236,78 +252,95 @@
           </p>
         </div>
 
-        <div class="features-grid">
-          <div class="feature-card" data-reveal="slide-left">
-            <div class="card-icon-wrap icon-blood">
-              <i data-lucide="film"></i>
+        <!-- FUSION DE SECTORES: Columna Izquierda (Experiencia / Proyección) + Columna Derecha (Coordenadas y Datos Clave) -->
+        <div class="unified-experience-grid">
+          <!-- Columna Izquierda: Tarjeta de Proyección y Experiencia -->
+          <div class="feature-card experience-main-card" data-reveal="slide-left">
+            <div class="card-jason-watermark" aria-hidden="true">
+              <img src="assets/jason-shadow.png" alt="" class="jason-watermark-img">
             </div>
-            <h3>Proyección en Pantalla Gigante</h3>
-            <p>Reviví el clásico inmortal de terror <em>Viernes 13 (1980)</em> con sonido ambiental inmersivo en el salón principal de Vicente López.</p>
-          </div>
-
-          <div class="feature-card featured-slasher" data-reveal="zoom-in">
-            <div class="card-icon-wrap icon-red-flame">
-              <i data-lucide="sparkles"></i>
+            <div class="experience-card-top">
+              <div class="card-icon-wrap icon-blood">
+                <i data-lucide="film"></i>
+              </div>
+              <div class="feature-badge">EXCLUSIVO</div>
             </div>
-            <div class="feature-badge">EXCLUSIVO</div>
-            <h3>Experiencia Gastronómica Mi Gusto</h3>
-            <p>Disfrutá durante toda la función de tus empanadas favoritas recién salidas del horno, bebidas frías y combos temáticos especiales.</p>
-          </div>
-
-          <div class="feature-card" data-reveal="slide-right">
-            <div class="card-icon-wrap icon-lake-teal">
-              <i data-lucide="ghost"></i>
+            <div class="experience-card-body">
+              <h3 class="experience-card-title">Viví una experiencia de terror</h3>
+              <p class="experience-lead">Revivimos el clásico de terror</p>
+              <p class="experience-text">
+                Proyección en pantalla gigante del clásico inmortal <em>Viernes 13 (1980)</em> con sonido ambiental inmersivo en el salón principal de Vicente López, ambientación temática tenebrosa y la mejor gastronomía de Mi Gusto durante toda la velada.
+              </p>
             </div>
-            <h3>Ambientación Camp Crystal Lake</h3>
-            <p>Decoración temática inmersiva, niebla, la máscara y el machete de Jason, y sorpresas tenebrosas en vivo durante la velada.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: DETALLES DEL EVENTO -->
-    <section class="event-details-section" id="detalles">
-      <div class="section-container">
-        <div class="event-details-card" data-reveal="zoom-in">
-          <div class="event-details-header">
-            <span class="section-eyebrow">COORDENADAS DE LA FUNCIÓN</span>
-            <h2 class="details-title">TODO LO QUE TENÉS QUE SABER</h2>
+            <div class="experience-highlights">
+              <div class="highlight-chip">
+                <i data-lucide="sparkles"></i>
+                <span>Menú & combos temáticos</span>
+              </div>
+              <div class="highlight-chip">
+                <i data-lucide="ghost"></i>
+                <span>Ambientación terrorífica</span>
+              </div>
+            </div>
           </div>
 
-          <div class="details-grid">
-            <div class="detail-box">
-              <div class="detail-icon"><i data-lucide="calendar"></i></div>
-              <div class="detail-content">
-                <h4>Fecha</h4>
-                <p>Este Sábado</p>
-                <span class="detail-sub">Apertura 20:30 hs · Función 21:00 hs</span>
+          <!-- Columna Derecha: Tarjetas de Fecha/Ubicación y Cupos/Estacionamiento/Película -->
+          <div class="experience-details-stack" data-reveal="slide-right">
+            <!-- Card 1: Fecha y Ubicación -->
+            <div class="detail-box-card">
+              <div class="detail-box-header">
+                <div class="detail-icon icon-blood">
+                  <i data-lucide="calendar"></i>
+                </div>
+                <div>
+                  <span class="detail-card-tag">FECHA & LUGAR</span>
+                  <h4 class="detail-card-title">Sábado 31 de Octubre</h4>
+                </div>
+              </div>
+              <div class="detail-box-info">
+                <div class="info-row">
+                  <i data-lucide="map-pin" class="row-icon"></i>
+                  <div>
+                    <strong>Mi Gusto Vicente López</strong>
+                    <span class="detail-sub">Av. Maipú 1490, Vicente López · Apertura 20:30 hs · Función 21:00 hs</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="detail-box">
-              <div class="detail-icon"><i data-lucide="map-pin"></i></div>
-              <div class="detail-content">
-                <h4>Ubicación</h4>
-                <p>Mi Gusto Vicente López</p>
-                <span class="detail-sub">Av. Maipú 1490, Vicente López</span>
+            <!-- Card 2: Cupos Limitados, Estacionamiento y Película -->
+            <div class="detail-box-card highlight-border">
+              <div class="detail-box-header">
+                <div class="detail-icon icon-lake-teal">
+                  <i data-lucide="users"></i>
+                </div>
+                <div>
+                  <span class="detail-card-tag">CAPACIDAD & BENEFICIOS</span>
+                  <h4 class="detail-card-title">Cupos Limitados</h4>
+                </div>
               </div>
-            </div>
-
-            <div class="detail-box">
-              <div class="detail-icon"><i data-lucide="users"></i></div>
-              <div class="detail-content">
-                <h4>Capacidad</h4>
-                <p>Cupos Muy Limitados</p>
-                <span class="detail-sub">Solo 50 lugares disponibles en el salón</span>
-              </div>
-            </div>
-
-            <div class="detail-box">
-              <div class="detail-icon"><i data-lucide="clapperboard"></i></div>
-              <div class="detail-content">
-                <h4>Película</h4>
-                <p>Viernes 13 (Original)</p>
-                <span class="detail-sub">Jason Voorhees · Terror Clásico 80s</span>
+              <div class="detail-box-info">
+                <div class="info-row">
+                  <i data-lucide="armchair" class="row-icon text-blood"></i>
+                  <div>
+                    <strong class="text-glow-red">34 lugares disponibles</strong>
+                    <span class="detail-sub">Capacidad reducida en el salón para vivir una función íntima y exclusiva.</span>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <i data-lucide="car" class="row-icon text-teal"></i>
+                  <div>
+                    <strong>Estacionamiento enfrente</strong>
+                    <span class="detail-sub">1 hora gratuita en el Centro Asturiano con tu reserva.</span>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <i data-lucide="clapperboard" class="row-icon text-white"></i>
+                  <div>
+                    <strong>Película: Viernes 13 (Original 1980)</strong>
+                    <span class="detail-sub">Jason Voorhees · Proyección especial de Halloween.</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -329,8 +362,7 @@
           <h4>Navegación</h4>
           <a href="#inicio">Inicio</a>
           <a href="#reservar">Reservar Mesa</a>
-          <a href="#experiencia">La Experiencia</a>
-          <a href="#detalles">Coordenadas</a>
+          <a href="#experiencia">Experiencia & Coordenadas</a>
         </div>
         <div class="link-column">
           <h4>Contacto & Redes</h4>
