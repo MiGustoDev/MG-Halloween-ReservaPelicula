@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Giveaway Form Handler & LocalStorage Registration
   setupGiveawayForm();
 
-  // 5. Sound Ambience FX (Synthesized Halloween Sound using Web Audio API)
-  setupSpookyAudio();
+  // 5. Periodic Thunder Audio FX (Web Audio API, no rain, occasional strikes)
+  setupPeriodicThunderAudio();
 
   // 6. Dynamic Live Counter Increment
   setupLiveCounter();
@@ -206,83 +206,131 @@ function fireHalloweenConfetti() {
 }
 
 /**
- * Web Audio API synthesizer for spooky mysterious wind / drone ambience
+ * Web Audio API synthesizer for realistic, non-constant thunder strikes
+ * Pure deep rumble and acoustic cracks (zero rain, zero continuous hiss).
  */
-function setupSpookyAudio() {
-  const btn = document.getElementById('audioToggle');
-  const icon = document.getElementById('audioIcon');
-  if (!btn) return;
-
+function setupPeriodicThunderAudio() {
   let audioCtx = null;
-  let isPlaying = false;
-  let droneOsc = null;
-  let lfo = null;
-  let gainNode = null;
+  let hasUserInteracted = false;
+  let thunderTimer = null;
+  const overlay = document.getElementById('lightningOverlay');
 
-  btn.addEventListener('click', () => {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function initAudioContext() {
+    if (hasUserInteracted) return;
+    hasUserInteracted = true;
+
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      audioCtx = new AudioContextClass();
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      // Schedule first thunder strike after 5 to 9 seconds
+      const initialDelay = 5000 + Math.random() * 4000;
+      thunderTimer = setTimeout(() => {
+        triggerThunderWithSchedule();
+      }, initialDelay);
+    } catch (err) {
+      console.warn('AudioContext not allowed or supported:', err);
     }
+
+    // Clean up one-time interaction listeners
+    ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
+      window.removeEventListener(evt, initAudioContext);
+    });
+  }
+
+  // Listen for first user gesture to unlock browser audio policy
+  ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
+    window.addEventListener(evt, initAudioContext, { passive: true });
+  });
+
+  function triggerThunderWithSchedule() {
+    playThunderStrike();
+
+    // Schedule next strike at an irregular, occasional interval (every 25 to 45 seconds)
+    const nextInterval = 25000 + Math.random() * 20000;
+    thunderTimer = setTimeout(triggerThunderWithSchedule, nextInterval);
+  }
+
+  function playThunderStrike() {
+    if (!audioCtx) return;
 
     if (audioCtx.state === 'suspended') {
       audioCtx.resume();
     }
 
-    if (!isPlaying) {
-      // Start ambient synth drone
-      droneOsc = audioCtx.createOscillator();
-      const droneOsc2 = audioCtx.createOscillator();
-      lfo = audioCtx.createOscillator();
-      const lfoGain = audioCtx.createGain();
-      gainNode = audioCtx.createGain();
-
-      droneOsc.type = 'sawtooth';
-      droneOsc.frequency.value = 55; // A1 low drone
-
-      droneOsc2.type = 'sine';
-      droneOsc2.frequency.value = 55.4; // slight beating
-
-      // Low pass filter
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 180;
-
-      // LFO modulation
-      lfo.frequency.value = 0.2;
-      lfoGain.gain.value = 60;
-      lfo.connect(filter.frequency);
-
-      // Volume
-      gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 3);
-
-      droneOsc.connect(filter);
-      droneOsc2.connect(filter);
-      filter.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      droneOsc.start();
-      droneOsc2.start();
-      lfo.start();
-
-      isPlaying = true;
-      btn.style.background = '#ff6a00';
-      btn.style.color = '#000';
-      btn.title = 'Silenciar ambiente tenebroso';
-    } else {
-      if (gainNode) {
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
-        setTimeout(() => {
-          if (droneOsc) droneOsc.stop();
-          if (lfo) lfo.stop();
-          isPlaying = false;
-        }, 1000);
-      }
-      btn.style.background = '';
-      btn.style.color = '';
-      btn.title = 'Activar sonido tenebroso';
+    // Trigger visual lightning flicker in sync with the thunder
+    if (overlay) {
+      overlay.classList.remove('flash');
+      // Trigger reflow to restart CSS animation
+      void overlay.offsetWidth;
+      overlay.classList.add('flash');
     }
-  });
+
+    const sampleRate = audioCtx.sampleRate;
+    const duration = 4.5; // seconds of rolling acoustic rumble
+    const bufferSize = Math.floor(sampleRate * duration);
+    const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    // Generate Pink/Brownish noise for warm low-end rumble (avoids harsh hiss)
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.12;
+      b6 = white * 0.115926;
+    }
+
+    const noiseSource = audioCtx.createBufferSource();
+    noiseSource.buffer = buffer;
+
+    // Filter 1: Low-pass filter to completely block high frequencies (NO rain, NO hiss)
+    const lowpass = audioCtx.createBiquadFilter();
+    lowpass.type = 'lowpass';
+    const now = audioCtx.currentTime;
+    lowpass.frequency.setValueAtTime(140, now);
+    lowpass.frequency.linearRampToValueAtTime(240, now + 0.35); // Initial clap crackle
+    lowpass.frequency.exponentialRampToValueAtTime(75, now + duration);
+
+    // Filter 2: Sub-bass resonance filter for the chest-thump rumble
+    const subBass = audioCtx.createBiquadFilter();
+    subBass.type = 'peaking';
+    subBass.frequency.value = 65;
+    subBass.Q.value = 2.2;
+    subBass.gain.value = 9; // +9 dB boost to deep bass
+
+    // Dynamic gain envelope: Thunder strike + rolling cloud echoes
+    const masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.001, now);
+    // Sudden initial strike (50ms)
+    masterGain.gain.exponentialRampToValueAtTime(0.32, now + 0.06);
+    // Echo waves & rolling thunder
+    masterGain.gain.exponentialRampToValueAtTime(0.18, now + 0.28);
+    masterGain.gain.exponentialRampToValueAtTime(0.26, now + 0.65);
+    masterGain.gain.exponentialRampToValueAtTime(0.12, now + 1.2);
+    masterGain.gain.exponentialRampToValueAtTime(0.19, now + 1.9);
+    masterGain.gain.exponentialRampToValueAtTime(0.06, now + 2.8);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    // Connect node chain
+    noiseSource.connect(lowpass);
+    lowpass.connect(subBass);
+    subBass.connect(masterGain);
+    masterGain.connect(audioCtx.destination);
+
+    noiseSource.start(now);
+    noiseSource.stop(now + duration);
+  }
 }
 
 /**
