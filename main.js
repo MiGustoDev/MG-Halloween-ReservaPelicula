@@ -33,7 +33,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 9. Non-constant Periodic Thunder (Web Audio API, no rain)
   setupPeriodicThunderAudio();
+
+  // 10. Adaptive Video Loader (Saves bandwidth & ensures high performance autoplay)
+  setupAdaptiveHeroVideo();
 });
+
+/**
+ * Adaptive Video Loader & Player
+ * Descarga EXCLUSIVAMENTE el video necesario para el dispositivo (ahorra ~24MB en celulares y ~20MB en computadoras)
+ * Usa preload="metadata" y streaming progresivo eficiente.
+ */
+function setupAdaptiveHeroVideo() {
+  const webVideo = document.getElementById('heroBgVideoWeb');
+  const appVideo = document.getElementById('heroBgVideoApp');
+  if (!webVideo && !appVideo) return;
+
+  function loadActiveVideo() {
+    const isMobile = window.innerWidth <= 768;
+    const active = isMobile ? appVideo : webVideo;
+    const inactive = isMobile ? webVideo : appVideo;
+
+    // Liberar video inactivo si existía
+    if (inactive && inactive.getAttribute('src')) {
+      inactive.pause();
+      inactive.removeAttribute('src');
+      inactive.load();
+    }
+
+    // Cargar e iniciar video activo
+    if (active && (!active.getAttribute('src') || active.src === '')) {
+      const srcUrl = active.getAttribute('data-src');
+      if (srcUrl) {
+        active.src = srcUrl;
+        active.load();
+        const playPromise = active.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Reintento silencioso en caso de modo ahorro de batería móvil al primer toque
+            const resumeOnTouch = () => {
+              active.play().catch(() => {});
+              window.removeEventListener('touchstart', resumeOnTouch);
+              window.removeEventListener('click', resumeOnTouch);
+            };
+            window.addEventListener('touchstart', resumeOnTouch, { passive: true, once: true });
+            window.addEventListener('click', resumeOnTouch, { passive: true, once: true });
+          });
+        }
+      }
+    }
+  }
+
+  loadActiveVideo();
+
+  // Escuchar si el usuario cambia el tamaño o rota la pantalla
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(loadActiveVideo, 250);
+  }, { passive: true });
+}
 
 /**
  * Navbar Reveal on Scroll

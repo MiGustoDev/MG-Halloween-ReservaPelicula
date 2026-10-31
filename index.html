@@ -66,13 +66,13 @@
     <div class="lurker-actor lurker-right" id="lurkerJason">
       <div class="lurker-glow"></div>
       <div class="machete-slash-gleam"></div>
-      <img src="assets/jason-slasher-pro.png" alt="Jason Voorhees acechando" class="lurker-jason-img">
+      <img src="assets/jason-slasher-pro.png" alt="Jason Voorhees acechando" class="lurker-jason-img" loading="lazy" decoding="async">
     </div>
 
     <!-- Left Lurker: Jason Iconic Hockey Mask -->
     <div class="lurker-actor lurker-left" id="lurkerMask">
       <div class="mask-halo"></div>
-      <img src="assets/jason-mask.png" alt="Máscara de hockey de Jason" class="lurker-mask-img">
+      <img src="assets/jason-mask.png" alt="Máscara de hockey de Jason" class="lurker-mask-img" loading="lazy" decoding="async">
       <div class="mask-scratches"></div>
     </div>
   </div>
@@ -102,7 +102,7 @@
   <main>
     <!-- HERO SECTION (FULLSCREEN VIDEO BACKGROUND + CENTER LOGO & RESERVAR BUTTON) -->
     <section class="hero-fullscreen" id="inicio">
-      <!-- Background Responsive Video: Desktop (web.mp4) & Mobile (app.mp4) -->
+      <!-- Background Responsive Video: Carga adaptativa inteligente (descarga únicamente el video del dispositivo) -->
       <video 
         class="hero-bg-video video-desktop" 
         id="heroBgVideoWeb" 
@@ -110,10 +110,10 @@
         muted 
         loop 
         playsinline 
-        preload="auto"
+        preload="metadata"
         poster="assets/crystal-lake-bg.jpg"
+        data-src="videos/web.mp4"
       >
-        <source src="videos/web.mp4" type="video/mp4">
       </video>
 
       <video 
@@ -123,11 +123,20 @@
         muted 
         loop 
         playsinline 
-        preload="auto"
+        preload="metadata"
         poster="assets/crystal-lake-bg.jpg"
+        data-src="videos/app.mp4"
       >
-        <source src="videos/app.mp4" type="video/mp4">
       </video>
+      <script>
+        (function() {
+          var isMob = window.innerWidth <= 768;
+          var v = document.getElementById(isMob ? 'heroBgVideoApp' : 'heroBgVideoWeb');
+          if (v && v.dataset.src) {
+            v.src = v.dataset.src;
+          }
+        })();
+      </script>
 
       <!-- Video Fullscreen 100% Brillo Natural -->
 
@@ -149,7 +158,7 @@
           <div class="giveaway-blood-glow"></div>
           
           <div class="card-jason-stalker" aria-hidden="true">
-            <img src="assets/jason-mask.png" alt="Máscara Jason" class="jason-stalker-img">
+            <img src="assets/jason-mask.png" alt="Máscara Jason" class="jason-stalker-img" loading="lazy" decoding="async">
           </div>
 
           <div class="giveaway-header">
@@ -210,7 +219,7 @@
           <!-- Success State -->
           <div class="success-box" id="successState" style="display: none;">
             <div class="success-icon-wrap">
-              <img src="assets/jason-mask.png" alt="Máscara Jason Éxito" class="success-mask-icon">
+              <img src="assets/jason-mask.png" alt="Máscara Jason Éxito" class="success-mask-icon" loading="lazy" decoding="async">
             </div>
             <h3 class="success-title">¡RESERVA CONFIRMADA! 🎟️</h3>
             <p class="success-desc">
@@ -257,7 +266,7 @@
           <!-- Columna Izquierda: Tarjeta de Proyección y Experiencia -->
           <div class="feature-card experience-main-card" data-reveal="slide-left">
             <div class="card-jason-watermark" aria-hidden="true">
-              <img src="assets/jason-shadow.png" alt="" class="jason-watermark-img">
+              <img src="assets/jason-shadow.png" alt="" class="jason-watermark-img" loading="lazy" decoding="async">
             </div>
             <div class="experience-card-top">
               <div class="card-icon-wrap icon-blood">
@@ -353,7 +362,7 @@
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-brand">
-        <img src="assets/logo-migusto.png" alt="Mi Gusto" class="footer-logo">
+        <img src="assets/logo-migusto.png" alt="Mi Gusto" class="footer-logo" loading="lazy" decoding="async">
         <p>El verdadero sabor de las empanadas premium en Argentina. Noche de Peliculas viernes 13 en el local de Vicente Lopez.</p>
       </div>
 
