@@ -371,10 +371,10 @@ function setupScrollBloodSplatters() {
  * Recauda reservas reales registradas en localStorage
  */
 const TOTAL_CAPACITY = 34;
-const BASE_RESERVED = 0;
+const BASE_RESERVED = 9;
 
 function getReservedSeats() {
-  const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas') || '[]');
+  const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas_v2') || '[]');
   const extraSeats = reservations.reduce((acc, r) => acc + (parseInt(r.guests, 10) || 1), 0);
   return Math.min(TOTAL_CAPACITY, BASE_RESERVED + extraSeats);
 }
@@ -422,7 +422,10 @@ function setupReservationForm() {
     e.preventDefault();
 
     const name = document.getElementById('userName').value.trim();
-    const phone = document.getElementById('userPhone').value.trim();
+    let phone = document.getElementById('userPhone').value.trim();
+    if (phone.startsWith('+') || phone.startsWith('=')) {
+      phone = "'" + phone;
+    }
     const guests = document.getElementById('userGuests').value;
 
     if (!name || !phone || !guests) return;
@@ -461,12 +464,12 @@ function setupReservationForm() {
     }
 
     // 2. Guardar siempre en LocalStorage como resguardo
-    const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas') || '[]');
+    const reservations = JSON.parse(localStorage.getItem('migusto_vl_reservas_v2') || '[]');
     reservations.push({
       ...payload,
       id: `V13-${Date.now()}`
     });
-    localStorage.setItem('migusto_vl_reservas', JSON.stringify(reservations));
+    localStorage.setItem('migusto_vl_reservas_v2', JSON.stringify(reservations));
 
     // Update real-time capacity counter
     updateCapacityDisplay();

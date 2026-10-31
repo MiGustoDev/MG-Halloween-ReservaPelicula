@@ -600,7 +600,9 @@ body.friday-theme {
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  white-space: nowrap;
   background: linear-gradient(135deg, var(--blood-red) 0%, var(--blood-red-deep) 100%);
   color: #fff;
   text-decoration: none;
@@ -615,6 +617,10 @@ body.friday-theme {
   transition: var(--transition-smooth);
   cursor: pointer;
   overflow: hidden;
+}
+
+.btn-reserve-text {
+  white-space: nowrap;
 }
 
 .btn-hero-reserve:hover {
@@ -1764,6 +1770,17 @@ body.friday-theme {
     width: auto;
   }
 
+  .btn-hero-reserve,
+  .btn-reserve-text {
+    white-space: nowrap !important;
+  }
+
+  .btn-hero-reserve {
+    padding: 12px 24px;
+    font-size: 0.88rem;
+    max-width: calc(100vw - 40px);
+  }
+
   .input-row {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1996,6 +2013,12 @@ body.friday-theme {
    Notebook & Laptop Scaling Adaptation (Preserves Desktop Monitor Untouched)
    Active only on screens with height <= 860px (Notebook viewports)
    ========================================================================== */
+@media screen and (min-width: 769px) and (max-height: 860px) {
+  .hero-center-box {
+    bottom: 6.5% !important;
+  }
+}
+
 @media screen and (max-height: 860px) {
   .giveaway-section {
     padding: 12px 20px 16px;
