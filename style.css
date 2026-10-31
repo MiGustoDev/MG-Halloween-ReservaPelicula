@@ -289,22 +289,25 @@ body.friday-theme {
   overflow: hidden;
 }
 
-/* Right Lurker: Jason Voorhees Full Body with Machete */
+/* Right Lurker: Jason Voorhees Full Body with Machete (jason-full.png) */
 .lurker-right {
   position: absolute;
-  top: 18%;
-  right: 0;
-  width: 380px;
-  max-width: 32vw;
-  transform: translateX(115%);
+  top: 50%;
+  right: 2.5vw;
+  width: clamp(240px, 21vw, 350px);
+  max-height: 84vh;
+  transform: translateY(-50%) translateX(120%);
   transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
   will-change: transform;
-  filter: drop-shadow(-15px 10px 30px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 25px rgba(229, 9, 20, 0.4));
+  filter: drop-shadow(-15px 10px 30px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 25px rgba(229, 9, 20, 0.45));
+  z-index: 12;
 }
 
 .lurker-jason-img {
   width: 100%;
   height: auto;
+  max-height: 84vh;
+  object-fit: contain;
   display: block;
   animation: jasonBreathe 5s ease-in-out infinite alternate;
 }
@@ -316,11 +319,11 @@ body.friday-theme {
 }
 
 .lurker-right.is-visible {
-  transform: translateX(28%);
+  transform: translateY(-50%) translateX(0);
 }
 
 .lurker-right.is-deep-stalking {
-  transform: translateX(15%);
+  transform: translateY(-50%) translateX(0);
   filter: drop-shadow(-20px 10px 40px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 35px rgba(229, 9, 20, 0.7));
 }
 
@@ -1972,15 +1975,9 @@ body.friday-theme {
     display: none;
   }
 
-  /* Assets laterales de Jason en Mobile: Presencia cinematográfica, imponente y limpia */
+  /* Assets laterales de Jason en Mobile: Solo máscara izquierda para mantener mobile limpio y sin superposiciones */
   .lurker-right {
-    width: 175px;
-    max-width: 44vw;
-    top: auto;
-    bottom: 4%;
-    right: 0;
-    filter: drop-shadow(-10px 8px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(229, 9, 20, 0.65));
-    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+    display: none !important;
   }
 
   .lurker-left {
@@ -1990,17 +1987,6 @@ body.friday-theme {
     left: 0;
     filter: drop-shadow(10px 10px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(0, 229, 163, 0.55));
     transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
-  }
-
-  .lurker-right.is-visible {
-    transform: translateX(28%);
-    opacity: 0.92;
-  }
-
-  .lurker-right.is-deep-stalking {
-    transform: translateX(18%);
-    opacity: 1;
-    filter: drop-shadow(-15px 10px 30px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 30px rgba(229, 9, 20, 0.85));
   }
 
   .lurker-left.is-visible {
@@ -2132,8 +2118,16 @@ body.friday-theme {
   }
 
   .lurker-right {
-    width: 320px;
-    top: 15%;
+    width: clamp(200px, 18vw, 275px);
+    max-height: 82vh;
+    top: 50%;
+    right: 2vw;
+    transform: translateY(-50%) translateX(120%);
+  }
+
+  .lurker-right.is-visible,
+  .lurker-right.is-deep-stalking {
+    transform: translateY(-50%) translateX(0) !important;
   }
 
   .lurker-left {
